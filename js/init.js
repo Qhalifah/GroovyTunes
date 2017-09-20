@@ -10,8 +10,8 @@ window.onload = function() {
   socket.onmessage = function(e) {
     var json = JSON.parse(e.data);
     console.log(json)
-    if (json.songs) {
-      //dispSongs(json.songs)
+    if (json) {
+      dispSongs(json)
     }
   }
 
@@ -22,13 +22,19 @@ window.onload = function() {
   }
 };
 
-
-
 function dispSongs(_songs) {
-  var html = ''
+  var fields = ['albumartist', 'album', 'genre', 'title', 'length']
+  var html = '<table><tr>'
+  _.each(fields, function(_field){html += '<th>' + _field + '</th>'});
+  html += '</tr>'
   _.each(_songs, function(_song) {
-    html += '<div><audio controls><source src="../songs/' + _song + '" type="audio/mpeg">Your browser does not support the audio element.</audio></div>'
+    html += '<tr>'
+    _.each(fields, function(_field){
+      html += '<td>' + (_song.meta[_field] || '') + '</td>'
+    });
+    html += '</tr>'
   });
+  html += '</table>'
   console.log(html);
   $('#songs').html(html);
 }

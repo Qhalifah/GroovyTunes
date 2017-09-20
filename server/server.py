@@ -1,6 +1,6 @@
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
-import glob, os, json
+import json, utility
 
 class MyServerProtocol(WebSocketServerProtocol):
 
@@ -11,18 +11,15 @@ class MyServerProtocol(WebSocketServerProtocol):
         print("WebSocket connection open.")
 
     def onMessage(self, payload, isBinary):
+        payload = str(payload, 'utf-8')
+        print("Recieved: " + payload)
         if(payload == "getMusic"):
-            os.chdir('../songs')
-            data = {};
-            data['songs'] = []
-            for f in glob.glob("*"):
-                data['songs'].append(f)
+            data = utility.getMusic("../songs")
             json_data = json.dumps(data)
-            print(json_data)
-            self.sendMessage(json_data)
+            print("Sending: music data")
+            self.sendMessage((json_data).encode('utf-8'))
         else:
-            print payload
-            self.sendMessage(payload, isBinary)
+            print("No Action")
 
     def onClose(self, wasClean, code, reason):
         print("WebSocket connection closed: {0}".format(reason))
@@ -39,9 +36,6 @@ if __name__ == '__main__':
 
     factory = WebSocketServerFactory(u"ws://127.0.0.1:9000")
     factory.protocol = MyServerProtocol
-    # factory.setProtocolOptions(maxConnections=2)
-
-    # note to self: if using putChild, the child must be bytes...
 
     reactor.listenTCP(9000, factory)
     reactor.run()

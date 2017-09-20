@@ -5,12 +5,13 @@ window.onload = function() {
             socket.onopen = function() {
                console.log("Connected!");
                isopen = true;
+               socket.send('getMusic')
             }
             socket.onmessage = function(e) {
               var json = JSON.parse(e.data);
-              console.log(json.songs)
+              console.log(json)
               if(json.songs){
-                dispSongs(json.songs)
+                //dispSongs(json.songs)
               }
             }
 

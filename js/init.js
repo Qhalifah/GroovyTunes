@@ -24,17 +24,21 @@ window.onload = function() {
 
 function dispSongs(_songs) {
   var fields = ['albumartist', 'album', 'genre', 'title', 'length']
-  var html = '<table><tr>'
+  var html = '<table class="table table-hover"><tr>'
   _.each(fields, function(_field){html += '<th>' + _field + '</th>'});
   html += '</tr>'
   _.each(_songs, function(_song) {
     html += '<tr>'
     _.each(fields, function(_field){
-      html += '<td>' + (_song.meta[_field] || '') + '</td>'
+      html += '<td onclick="dispPlayer(\'' + _song.src + '\')">' + (_song.meta[_field] || '') + '</td>'
     });
     html += '</tr>'
   });
   html += '</table>'
-  console.log(html);
   $('#songs').html(html);
+}
+
+function dispPlayer(_src){
+  html = '<audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+  $('#player').html(html);
 }

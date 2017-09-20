@@ -8,7 +8,7 @@ def getMusic(_dir):
     for f in glob.glob("*"):
         song = {}
         song['meta'] = dict(EasyID3(f))
-        song['src'] = "../" + f
+        song['src'] = "../songs/" + f
         songs.append(song)
     return songs
 

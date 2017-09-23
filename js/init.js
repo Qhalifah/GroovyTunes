@@ -1,5 +1,6 @@
 var socket = null;
 var isopen = false;
+var songs = {};
 window.onload = function() {
   socket = new WebSocket("ws://127.0.0.1:9000");
   socket.onopen = function() {
@@ -9,9 +10,10 @@ window.onload = function() {
   }
   socket.onmessage = function(e) {
     var json = JSON.parse(e.data);
-    console.log(json)
+    console.log(json);
     if (json) {
-      dispSongs(json)
+      songs = json;
+      dispSongs();
     }
   }
 
@@ -22,15 +24,15 @@ window.onload = function() {
   }
 };
 
-function dispSongs(_songs) {
+function dispSongs() {
   var fields = ['albumartist', 'album', 'genre', 'title', 'length']
   var html = '<table class="table table-hover"><tr>'
   _.each(fields, function(_field){html += '<th>' + _field + '</th>'});
   html += '</tr>'
-  _.each(_songs, function(_song) {
+  _.each(songs, function(_meta, _src) {
     html += '<tr>'
     _.each(fields, function(_field){
-      html += '<td onclick="dispPlayer(\'' + _song.src + '\')">' + (_song.meta[_field] || '') + '</td>'
+      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + (_meta[_field] || '') + '</td>'
     });
     html += '</tr>'
   });
@@ -39,6 +41,6 @@ function dispSongs(_songs) {
 }
 
 function dispPlayer(_src){
-  html = '<audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].artist +'</h3><audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
 }

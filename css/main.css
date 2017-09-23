@@ -26,3 +26,7 @@
 #navBar li a:hover {
   background-color: #111;
 }
+
+#player{
+  text-align: center;
+}

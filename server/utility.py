@@ -4,12 +4,9 @@ import glob, os, json
 
 def getMusic(_dir):
     os.chdir(_dir)
-    songs = [];
+    songs = {};
     for f in glob.glob("*"):
-        song = {}
-        song['meta'] = dict(EasyID3(f))
-        song['src'] = "../songs/" + f
-        songs.append(song)
+        songs["../songs/" + f] = dict(EasyID3(f))
     return songs
 
 # for testing

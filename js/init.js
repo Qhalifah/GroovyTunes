@@ -24,10 +24,14 @@ window.onload = function() {
   }
 };
 
+function capitalizeFirst(_str){
+  return _str.charAt(0).toUpperCase() + _str.slice(1);
+}
+
 function dispSongs() {
-  var fields = ['albumartist', 'album', 'genre', 'title', 'length']
+  var fields = ['title', 'albumartist', 'album', 'genre', 'length']
   var html = '<table class="table table-hover"><tr>'
-  _.each(fields, function(_field){html += '<th>' + _field + '</th>'});
+  _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
   html += '</tr>'
   _.each(songs, function(_meta, _src) {
     html += '<tr>'
@@ -41,6 +45,6 @@ function dispSongs() {
 }
 
 function dispPlayer(_src){
-  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].artist +'</h3><audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
 }

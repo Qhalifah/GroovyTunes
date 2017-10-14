@@ -2,7 +2,7 @@ var socket = null;
 var isopen = false;
 var songs = {};
 window.onload = function() {
-  socket = new WebSocket("ws://127.0.0.1:9000");
+  socket = new WebSocket("ws://127.0.0.1:8080");
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;

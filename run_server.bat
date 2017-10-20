@@ -1,1 +1,1 @@
-java -cp ".;bin;lib/*" webSocket
+"%JAVA_HOME%\bin\java" -cp ".;bin;lib/*" webSocket

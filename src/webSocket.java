@@ -6,6 +6,9 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 public class webSocket {
 
 public static void main(String[] args) throws Exception{
+    utility u = new utility();
+    u.getMusic("./songs");
+
   Server server = new Server(8080);
   ServletContextHandler ctx = new ServletContextHandler();
   ctx.addServlet(sLet.class, "");

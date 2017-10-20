@@ -4,23 +4,32 @@ import org.jaudiotagger.tag.*;
 import java.util.*;
 import java.io.*;
 
+
 public class utility {
-	public static void main(String[] args) throws Exception {
-		utility u = new utility();
-		u.getMusic("../songs/Black_Ant_-_01_-_Fater_Lee.mp3");
-	}
+
 
 	public void getMusic(String dir) throws Exception {
 		System.out.println("Getting music from " + dir);
-        AudioFile f = AudioFileIO.read(new File(dir));
+		File[] files = new File(dir).listFiles();
+		for(File file: files){
+			Song song = createSong(file);
+			System.out.println(song.getMetaData());
+		}
+	}
+
+	public Song createSong(File file) throws Exception{
+		AudioFile f = AudioFileIO.read(file);
 		Tag tag = f.getTag();
 		AudioHeader a = f.getAudioHeader();
-		System.out.println("Length: " + a.getTrackLength());
-		Iterator iter = tag.getFields();
-		while (iter.hasNext()) {
-            TagField t = (TagField)iter.next();
-			System.out.println(t.getId() + " " + t.toString());
-		}
+		Song song = new Song();
+		song.title = tag.getFirst(FieldKey.TITLE);
+		song.albumartist = tag.getFirst(FieldKey.ALBUM);
+		song.album = tag.getFirst(FieldKey.ALBUM_ARTIST);
+		song.genre = tag.getFirst(FieldKey.GENRE);
+		song.duration = a.getTrackLength();
+		song.songId = "" + song.nextId;
+		song.nextId++;
+		return song;
 	}
 
 }

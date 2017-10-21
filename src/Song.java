@@ -25,6 +25,7 @@ public class Song{
 		obj.put("albumartist", this.albumartist);
 		obj.put("album", this.album);
 		obj.put("genre", this.genre);
+		obj.put("duration", this.duration);
 		obj.put("songId", this.songId);
 		return obj;
 	}

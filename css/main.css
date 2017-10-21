@@ -27,6 +27,49 @@
   background-color: #111;
 }
 
+#sideBar{
+    left:0; top:170px; bottom: 0;
+    width: 178px;
+    background-color: #333;
+    position:absolute;
+}
+
+#sideBar h1{
+    color:white;
+    text-align: center;
+    text-decoration: underline;
+}
+
+#sideBar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+#sideBar li {
+  color:white;
+  text-align: center;
+  text-decoration: none;
+}
+
+#sideBar li:hover {
+  background-color: #111;
+}
+
+#main {
+    position: absolute;
+    left:178px; top:170px; right:0; bottom:0;
+}
+
+
+
+#songs{
+    height:90%;
+    overflow:auto;
+}
+
 #player{
   text-align: center;
 }

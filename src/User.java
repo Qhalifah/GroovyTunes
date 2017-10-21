@@ -16,12 +16,15 @@ public class User{
 	
 	public void createPlaylist(){
 		Playlist playlist = new Playlist();
-		playlist.playlistId = UUID.randomUUID().toString();
 		playlists.add(playlist);
 	}
 	
 	public void deletePlaylist(String playlistId){
-		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId);
+		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId));
+	}
+	
+	public void getPlaylists(){
+		
 	}
 
 }

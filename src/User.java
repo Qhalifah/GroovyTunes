@@ -21,6 +21,7 @@ public class User{
 	}
 	
 	public void deletePlaylist(String playlistId){
+		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId);
 	}
 
 }

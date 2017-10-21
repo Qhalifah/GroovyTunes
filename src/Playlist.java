@@ -1,8 +1,13 @@
 import java.util.Date;
 public class Playlist{
+	
 	private String playlistName;
 	public String playlistId;
 	public Date createDate;
+	
+	public Playlist(){
+		
+	}
 
 	public void addSong(String songId){
 		

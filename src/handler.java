@@ -36,8 +36,10 @@ public class handler{
         System.out.println("Message: " + message);
 		if(message.equals("getMusic")){
 			try {
-				JSONObject songs = u.getMusic("./songs");
-				session.getRemote().sendString(songs.toString());
+				JSONObject toSend = new JSONObject();
+				toSend.put("type", "getSongs");
+				toSend.put("message", u.getMusic("./songs"));
+				session.getRemote().sendString(toSend.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

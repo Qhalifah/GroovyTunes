@@ -9,11 +9,15 @@ window.onload = function() {
     socket.send('getMusic')
   }
   socket.onmessage = function(e) {
-    var json = JSON.parse(e.data);
-    console.log(json);
-    if (json) {
-      songs = json;
-      dispSongs();
+    var message = JSON.parse(e.data);
+    console.log(message);
+    if (message) {
+        switch(message.type){
+            case "getSongs":
+                songs = message.message;
+                dispSongs();
+                break;
+        }
     }
   }
 
@@ -29,7 +33,7 @@ function capitalizeFirst(_str){
 }
 
 function dispSongs() {
-  var fields = ['title', 'albumartist', 'album', 'genre', 'length']
+  var fields = ['title', 'albumartist', 'album', 'genre', 'duration']
   var html = '<table class="table table-hover"><tr>'
   _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
   html += '</tr>'
@@ -37,7 +41,8 @@ function dispSongs() {
     html += '<tr>'
     _src = _src.replace(/\\/g,'\\\\');
     _.each(fields, function(_field){
-      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + (_meta[_field] || '') + '</td>'
+        var toDisp = (_meta[_field] || '');
+      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>'
     });
     html += '</tr>'
   });

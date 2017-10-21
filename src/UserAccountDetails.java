@@ -1,4 +1,6 @@
 import java.util.Date;
+import org.json.simple.JSONObject;
+
 public class UserAccountDetails{
 	public String firstName;
 	public String lastName;
@@ -15,6 +17,12 @@ public class UserAccountDetails{
 	}
 	
 	public String getUserDetails(){
-		return "";
+		JSONObject obj = new JSONObject();
+		obj.put("firstName", this.firstName);
+		obj.put("lastName", this.lastName);
+		obj.put("dob", this.dob);
+		obj.put("dateJoined", this.dateJoined);
+		obj.put("membershipStatus", this.membershipStatus);
+		return obj.toString();
 	}
 }

@@ -10,20 +10,17 @@ public class User{
 	public User(String username, String password, String firstName, String lastName, Date dob){
 		this.username = username;
 		this.password = password;
-		 // Add method for date joined
-		
-		this.userDetails = new UserAccountDetails(String firstName, String lastName, Date dob, Date dateJoined);
+		this.userDetails = new UserAccountDetails(firstName, lastName, dob, new Date());
 	}
 		
 	
 	public void createPlaylist(){
 		Playlist playlist = new Playlist();
-		playlist.playlistId = 
+		playlist.playlistId = UUID.randomUUID().toString();
 		playlists.add(playlist);
 	}
 	
 	public void deletePlaylist(String playlistId){
-		playlists.remove()
 	}
 
 }

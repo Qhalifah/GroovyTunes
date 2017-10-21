@@ -15,6 +15,11 @@ public static void main(String[] args) throws Exception{
   server.setHandler(ctx);
   server.start();
   server.join();
+  
+  // Adding Admin User
+  User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
+  //System.out.println(admin.userDetails.toString());
+  
 }
 
 public static class sLet extends WebSocketServlet{

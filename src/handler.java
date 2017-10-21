@@ -34,7 +34,7 @@ public class handler{
     @OnWebSocketMessage
     public void onMessage(String message) {
         System.out.println("Message: " + message);
-		if(message == "getMusic"){
+		if(message.equals("getMusic")){
 			try {
 				JSONObject songs = u.getMusic("./songs");
 				session.getRemote().sendString(songs.toString());

@@ -17,7 +17,6 @@ public class utility {
 			Song song = createSong(file);
 			songs.put(file.getPath(), song.getMetaData());
 		}
-		System.out.println(songs.toString());
 		return songs;
 	}
 

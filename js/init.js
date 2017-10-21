@@ -2,7 +2,7 @@ var socket = null;
 var isopen = false;
 var songs = {};
 window.onload = function() {
-  socket = new WebSocket("ws://127.0.0.1:9000");
+  socket = new WebSocket("ws://127.0.0.1:8080");
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
@@ -35,6 +35,7 @@ function dispSongs() {
   html += '</tr>'
   _.each(songs, function(_meta, _src) {
     html += '<tr>'
+    _src = _src.replace(/\\/g,'\\\\');
     _.each(fields, function(_field){
       html += '<td onclick="dispPlayer(\'' + _src + '\')">' + (_meta[_field] || '') + '</td>'
     });
@@ -45,6 +46,6 @@ function dispSongs() {
 }
 
 function dispPlayer(_src){
-  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="\.' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
 }

@@ -43,7 +43,7 @@ public class handler{
 			switch (type){
 				case "getMusic":
 					toSend.put("type", "retGetMusic");
-					toSend.put("message", u.getMusic("./songs"));
+					toSend.put("message", u.getMusic());
 					session.getRemote().sendString(toSend.toString());
 					break;
 				case "getUser":

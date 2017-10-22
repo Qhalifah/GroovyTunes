@@ -17,7 +17,7 @@ public class User{
 
 		playlist.setName("All Songs");
 		try{
-			ArrayList<Song> songs = u.getAllSongs("./songs");
+			ArrayList<Song> songs = u.getAllSongs();
 			for(Song s : songs){
 				playlist.addSong(s.songId);
 			}

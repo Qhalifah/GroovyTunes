@@ -4,31 +4,64 @@ import org.jaudiotagger.tag.*;
 import java.util.*;
 import java.io.*;
 import org.json.simple.*;
+import com.opencsv.*;
+import java.util.stream.Collectors;
 
 
 public class utility {
+	private static final String SONGS_DATABASE = "./databases/songs.csv";
 
 
-	public JSONObject getMusic(String dir) throws Exception {
-		System.out.println("Getting music from " + dir);
-		File[] files = new File(dir).listFiles();
+	public static void main(String args[])throws Exception{
+		utility u = new utility();
+		new File(SONGS_DATABASE).delete();
+		u.updateSongDB("./songs");
+	}
+
+	public JSONObject getMusic() throws Exception {
 		JSONObject songs = new JSONObject();
-		for(File file: files){
-			Song song = createSong(file);
-			songs.put(file.getPath(), song.getMetaData());
+
+		CSVReader reader = new CSVReader(new FileReader(SONGS_DATABASE), ',', '"', 0);
+		List<String[]> allRows = reader.readAll();
+		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
+			String[] record = iterator.next();
+			Song song = createSong(record);
+			songs.put(record[13], song.getMetaData());
 		}
 		return songs;
 	}
 
-	public ArrayList<Song> getAllSongs(String dir) throws Exception {
-		System.out.println("Getting music from " + dir);
+	public ArrayList<Song> getAllSongs() throws Exception {
+		ArrayList<Song> songs = new ArrayList<Song>();
+
+		CSVReader reader = new CSVReader(new FileReader(SONGS_DATABASE), ',', '"', 0);
+		List<String[]> allRows = reader.readAll();
+		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
+			String[] record = iterator.next();
+			Song song = createSong(record);
+		}
+		return songs;
+	}
+
+	public void updateSongDB(String dir) throws Exception {
 		File[] files = new File(dir).listFiles();
 		ArrayList<Song> songs = new ArrayList<Song>();
 		for(File file: files){
 			Song song = createSong(file);
-			songs.add(song);
+			song.addToDb(file.getPath());
 		}
-		return songs;
+	}
+
+	public Song createSong(String[] record) throws Exception{
+		Song song = new Song(
+			record[3],
+			record[5],
+			record[7],
+			record[9],
+			Double.parseDouble(record[11]),
+			record[1]
+		);
+		return song;
 	}
 
 	public Song createSong(File file) throws Exception{
@@ -36,10 +69,10 @@ public class utility {
 		Tag tag = f.getTag();
 		AudioHeader a = f.getAudioHeader();
 		Song song = new Song(
-			tag.getFirst(FieldKey.TITLE),
-			tag.getFirst(FieldKey.ALBUM),
-			tag.getFirst(FieldKey.ALBUM_ARTIST),
-			tag.getFirst(FieldKey.GENRE),
+			tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
+			tag.getFirst(FieldKey.ALBUM).replaceAll(",", ";"),
+			tag.getFirst(FieldKey.ALBUM_ARTIST).replaceAll(",", ";"),
+			tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"),
 			a.getTrackLength()
 		);
 		return song;

@@ -7,8 +7,6 @@ import java.util.*;
 public class webSocket {
 
 public static void main(String[] args) throws Exception{
-    utility u = new utility();
-    u.getMusic("./songs");
 
   Server server = new Server(8080);
   ServletContextHandler ctx = new ServletContextHandler();
@@ -18,7 +16,7 @@ public static void main(String[] args) throws Exception{
   server.join();
 
   // Adding Admin User
-  User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
+  //User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
   //System.out.println(admin.userDetails.toString());
 
 }

@@ -51,9 +51,8 @@ public class Playlist{
 		try{
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE, true)); // true flag for appending to end of file
 			String songList = arrayListParser(songs);
-			String[] record = ("playListId," + playlistId + ",songList," + songList).split(",");
+			String[] record = ("Playlist ID:" + "," + playlistId + "," + "Playlist Name:" + "," + playlistName + "," + "Date Created:" + "," + createDate + "," + "Song ID's:" + "," + songList).split(",");
 			writer.writeNext(record);
-			//writer.write("\"" + playlistId + "\"" + "," + "\"" + songList + "\"" + "\n")
 			writer.flush();
 			writer.close();
 		}
@@ -85,18 +84,6 @@ public class Playlist{
 					iterator.remove();
 				}
 			}
-
-			/* 			int index = -1;
-			for(int i = 0; i < allRows.length; i++){
-				if(allRows.get(i)[0].equals(playlistId)){
-					index = i;
-					break;
-				}
-			}
-			if(index >= 0){
-				allRows.remove(index);
-			}
-			*/
 
 				// Writes List of playlists back into playlists.csv
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE));

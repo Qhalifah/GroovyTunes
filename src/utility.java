@@ -39,6 +39,7 @@ public class utility {
 		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
 			String[] record = iterator.next();
 			Song song = createSong(record);
+			songs.add(song);
 		}
 		return songs;
 	}

@@ -14,7 +14,8 @@ public class Playlist{
 	public Playlist(){
 		this.playlistId = UUID.randomUUID().toString();
 		this.songs = new ArrayList<String>();
-		//updatePlaylist(this.playlistId, this.songs);
+		this.createDate = new Date();
+		updatePlaylist();
 	}
 
 	public Playlist(String playlistId){
@@ -24,12 +25,12 @@ public class Playlist{
 
 	public void addSong(String songId){
 		this.songs.add(songId);
-		updatePlaylist(this.playlistId, this.songs);
+		updatePlaylist();
 	}
 
 	public void removeSong(String songId){
 		this.songs.remove(songId);
-		updatePlaylist(this.playlistId, this.songs);
+		updatePlaylist();
 	}
 
 	public String getName(){
@@ -38,13 +39,14 @@ public class Playlist{
 
 	public void setName(String name){
 		this.playlistName = name;
+		updatePlaylist();
 	}
 
 	public String share(){
 		return "";
 	}
 
-	public void updatePlaylist(String playlistId, ArrayList<String> songs){
+	public void updatePlaylist(){
 			// Removed existing playlist from database
 		removePlaylist(playlistId);
 

@@ -14,22 +14,23 @@ public class Playlist{
 	public Playlist(){
 		this.playlistId = UUID.randomUUID().toString();
 		this.songs = new ArrayList<String>();
-		//updatePlaylist(this.playlistId, this.songs);
+		this.updatePlaylist();
 	}
 
 	public Playlist(String playlistId){
 		this.playlistId = playlistId;
-		this.songs = new ArrayList<String>();
+		this.songs = new ArrayList<String>(); // Must read in songs from old playlist
+		this.songs = getSongsInPlaylist(this.songs);
 	}
 
 	public void addSong(String songId){
 		this.songs.add(songId);
-		updatePlaylist(this.playlistId, this.songs);
+		this.updatePlaylist();
 	}
 
 	public void removeSong(String songId){
 		this.songs.remove(songId);
-		updatePlaylist(this.playlistId, this.songs);
+		this.updatePlaylist();
 	}
 
 	public String getName(){
@@ -44,13 +45,14 @@ public class Playlist{
 		return "";
 	}
 
-	public static void updatePlaylist(String playlistId, ArrayList<String> songs){
+	public void updatePlaylist(){
 			// Removed existing playlist from database
 		removePlaylist(playlistId);
 
 		try{
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE, true)); // true flag for appending to end of file
 			String songList = arrayListParser(songs);
+				// record: ["Playlist ID:", playlistId, "Playlist Name:", playlistName, "Date Created:", createdDate, "Song ID's:", songList]
 			String[] record = ("Playlist ID:" + "," + playlistId + "," + "Playlist Name:" + "," + playlistName + "," + "Date Created:" + "," + createDate + "," + "Song ID's:" + "," + songList).split(",");
 			writer.writeNext(record);
 			writer.flush();
@@ -101,5 +103,30 @@ public class Playlist{
 	private static String arrayListParser(ArrayList<String> songs){
 		String collect = songs.stream().collect(Collectors.joining(","));
 		return collect;
+	}
+	
+	private ArrayList<String> getSongsInPlaylist(ArrayList<String> songs){
+		try{
+			CSVReader reader = new CSVReader(new FileReader(PLAYLISTS_DATABASE), ',', '"', 0);
+			List<String[]> allRows = reader.readAll();
+			
+			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
+				String[] record = iterator.next();
+				if (record[1].equals(playlistId)) {
+					// Get songs and add to ArrayList
+					for(int i = 7; i < record.length; i++){
+						songs.add(record[i]);
+					}
+				}
+			}
+			
+			return songs;
+		}
+		
+		catch (Exception e){
+			
+		}
+		
+		return songs;
 	}
 }

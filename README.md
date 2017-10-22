@@ -2,11 +2,11 @@
 Group project for object oriented analysis and  design
 
 server:
+  to compile:
+    run recompile.bat
   to run:
-    go to the server folder
-    run python server.py
-    requires mutagen, autobahn, twisted
-
+    run run_server.bat
+	
 client:
   to run:
     go to html folder

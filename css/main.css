@@ -58,6 +58,15 @@
   background-color: #111;
 }
 
+#newPlaylist{
+    color:white;
+    text-align: center;
+}
+
+#newPlaylist:hover{
+    background-color: #111;
+}
+
 #main {
     position: absolute;
     left:178px; top:170px; right:0; bottom:0;

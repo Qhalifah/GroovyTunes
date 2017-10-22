@@ -1,23 +1,41 @@
 var socket = null;
 var isopen = false;
 var songs = {};
+var user = {};
+var playlists = {};
+
 window.onload = function() {
   socket = new WebSocket("ws://127.0.0.1:8080");
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
-    socket.send('getMusic')
+    var msg = {
+        type: 'getMusic'
+    };
+    socket.send(JSON.stringify(msg));
+    msg = {
+        type: 'getUser'
+    };
+    socket.send(JSON.stringify(msg));
+    msg = {
+        type: 'getPlaylists'
+    };
+    socket.send(JSON.stringify(msg));
   }
   socket.onmessage = function(e) {
     var message = JSON.parse(e.data);
     console.log(message);
-    if (message) {
-        switch(message.type){
-            case "getSongs":
-                songs = message.message;
-                dispSongs();
-                break;
-        }
+    switch(message.type){
+        case "retGetMusic":
+            songs = message.message;
+            dispSongs();
+            break;
+        case "retGetUser":
+            break;
+        case "retGetPlaylists":
+            playlists = message.message;
+            dispPlaylists();
+            break;
     }
   }
 
@@ -28,10 +46,32 @@ window.onload = function() {
   }
 };
 
+function createPlaylist(){
+    var msg = {
+        type: 'createPlaylist'
+    }
+    socket.send(JSON.stringify(msg));
+}
+
 function capitalizeFirst(_str){
   return _str.charAt(0).toUpperCase() + _str.slice(1);
 }
 
+function dispPlaylists(){
+    var html = '';
+    _.each(playlists, function(playlist){
+        html += '<li onclick="dispPlaylist(\'' + playlist.playlistId + '\')">' + (playlist.playlistName || 'New Playlist') + '</li>';
+    });
+    $('#playlists').html(html);
+}
+
+function dispPlaylist(_id){
+    var msg = {
+        type: 'dispPlaylist',
+        id: _id,
+    }
+    socket.send(JSON.stringify(msg));
+}
 function dispSongs() {
   var fields = ['title', 'albumartist', 'album', 'genre', 'duration']
   var html = '<table class="table table-hover"><tr>'

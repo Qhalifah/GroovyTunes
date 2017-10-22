@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 import org.json.simple.*;
+import org.json.simple.parser.*;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -13,7 +14,8 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 public class handler{
 	private Session session;
 	utility u = new utility();
-
+	JSONParser parser = new JSONParser();
+	User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
@@ -33,16 +35,38 @@ public class handler{
 
     @OnWebSocketMessage
     public void onMessage(String message) {
-        System.out.println("Message: " + message);
-		if(message.equals("getMusic")){
-			try {
-				JSONObject toSend = new JSONObject();
-				toSend.put("type", "getSongs");
-				toSend.put("message", u.getMusic("./songs"));
-				session.getRemote().sendString(toSend.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			JSONObject msgJSON = (JSONObject) parser.parse(message);
+			String type = (String) msgJSON.get("type");
+        	System.out.println("Message: " + msgJSON);
+			JSONObject toSend = new JSONObject();
+			switch (type){
+				case "getMusic":
+					toSend.put("type", "retGetMusic");
+					toSend.put("message", u.getMusic("./songs"));
+					session.getRemote().sendString(toSend.toString());
+					break;
+				case "getUser":
+					toSend.put("type", "retGetUser");
+					toSend.put("message", admin.getUserInfo());
+					session.getRemote().sendString(toSend.toString());
+					break;
+				case "getPlaylists":
+					toSend.put("type", "retGetPlaylists");
+					toSend.put("message", admin.getPlaylists());
+					session.getRemote().sendString(toSend.toString());
+					break;
+				case "createPlaylist":
+					admin.createPlaylist();
+					toSend.put("type", "retGetPlaylists");
+					toSend.put("message", admin.getPlaylists());
+					session.getRemote().sendString(toSend.toString());
+					break;
+				case "dispPlaylist":
+					break;
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
     }
 }

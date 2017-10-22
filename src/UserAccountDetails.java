@@ -7,7 +7,7 @@ public class UserAccountDetails{
 	public Date dob;
 	public Date dateJoined;
 	public boolean membershipStatus;
-	
+
 	public UserAccountDetails(String firstName, String lastName, Date dob, Date dateJoined){
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -15,14 +15,14 @@ public class UserAccountDetails{
 			this.dateJoined = dateJoined;
 			this.membershipStatus = false;
 	}
-	
-	public String getUserDetails(){
+
+	public JSONObject getUserDetails(){
 		JSONObject obj = new JSONObject();
 		obj.put("firstName", this.firstName);
 		obj.put("lastName", this.lastName);
-		obj.put("dob", this.dob);
-		obj.put("dateJoined", this.dateJoined);
+		obj.put("dob", this.dob.toString());
+		obj.put("dateJoined", this.dateJoined.toString());
 		obj.put("membershipStatus", this.membershipStatus);
-		return obj.toString();
+		return obj;
 	}
 }

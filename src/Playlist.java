@@ -45,6 +45,7 @@ public class Playlist{
 		return "";
 	}
 
+
 	public void updatePlaylist(){
 			// Removed existing playlist from database
 		removePlaylist(playlistId);

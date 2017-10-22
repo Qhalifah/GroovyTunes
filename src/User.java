@@ -1,10 +1,13 @@
-import java.util.*;
 import org.json.simple.*;
+import java.util.*;
+import com.opencsv.*;
+import java.util.stream.Collectors;
+import java.io.*;
 
 public class User{
 	private String username;
 	private String password;
-        private static final String USERS_DATABASE = "./databases/users.csv"; 
+        private static final String USERS_DATABASE = "./databases/users.csv";
 	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 	private UserAccountDetails userDetails;
 
@@ -22,6 +25,7 @@ public class User{
 
 	public void deletePlaylist(String playlistId){
 		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId));
+		Playlist.removePlaylist(playlistId);
 	}
 
 	public JSONArray getPlaylists(){
@@ -38,12 +42,12 @@ public class User{
 	public JSONObject getUserInfo(){
 		return this.userDetails.getUserDetails();
 	}
-	
+
 	public static void updateUserInfo(String username, String firstName, String lastName, Date dob, Date dateJoined) throws IOException{
 		removeUser(username);
-		
+
 		try{
-			boolean status = false; 
+			boolean status = false;
 			CSVWriter writer = new CSVWriter(new FileWriter(USERS_DATABASE, true)); // true flag for appending to end of file
 			String[] record = ("Id," + username + ",fname," + firstName + ",lname," + lastName + ",dob," + dob + ",datejoin," + dateJoined + ",membershipStatus," + status ).split(",");
 			writer.writeNext(record);
@@ -55,10 +59,10 @@ public class User{
 			e.printStackTrace();
 		}
 	}
-	
-	public static void removePlaylist(String username){
+
+	public static void removeUser(String username){
 		try{
-			
+
 			CSVReader reader = new CSVReader(new FileReader(USERS_DATABASE), ',', '"', 0);
 			List<String[]> allRows = reader.readAll();
 

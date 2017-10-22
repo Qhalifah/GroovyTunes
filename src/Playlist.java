@@ -44,7 +44,7 @@ public class Playlist{
 		return "";
 	}
 
-	public static void updatePlaylist(String playlistId, ArrayList<String> songs){
+	public void updatePlaylist(String playlistId, ArrayList<String> songs){
 			// Removed existing playlist from database
 		removePlaylist(playlistId);
 

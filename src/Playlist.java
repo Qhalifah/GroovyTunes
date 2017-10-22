@@ -16,7 +16,7 @@ public class Playlist{
 		this.songs = new ArrayList<String>();
 		//updatePlaylist(this.playlistId, this.songs);
 	}
-	
+
 	public Playlist(String playlistId){
 		this.playlistId = playlistId;
 		this.songs = new ArrayList<String>();
@@ -43,27 +43,27 @@ public class Playlist{
 	public String share(){
 		return "";
 	}
-	
+
 	public static void updatePlaylist(String playlistId, ArrayList<String> songs){
 			// Removed existing playlist from database
 		removePlaylist(playlistId);
-		
+
 		try{
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE, true)); // true flag for appending to end of file
 			String songList = arrayListParser(songs);
-			String[] record = (playlistId + "," + songList).split(",");
+			String[] record = ("playListId," + playlistId + ",songList," + songList).split(",");
 			writer.writeNext(record);
 			//writer.write("\"" + playlistId + "\"" + "," + "\"" + songList + "\"" + "\n")
 			writer.flush();
 			writer.close();
 		}
-		
+
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 		// Reads in all playlists from playlists.csv
 		// Removes the playlist based on playlistId
 		// Rewrites playlists back into playlists.csv
@@ -81,12 +81,12 @@ public class Playlist{
 				// For each String[] record, if 0th element (playlistId) is the one to be deleted, it is removed from List
 			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
 				String[] record = iterator.next();
-				if (record[0].equals(playlistId)) {
+				if (record[1].equals(playlistId)) {
 					iterator.remove();
 				}
 			}
-			
-			/* 			int index = -1; 
+
+			/* 			int index = -1;
 			for(int i = 0; i < allRows.length; i++){
 				if(allRows.get(i)[0].equals(playlistId)){
 					index = i;
@@ -95,16 +95,16 @@ public class Playlist{
 			}
 			if(index >= 0){
 				allRows.remove(index);
-			} 
+			}
 			*/
-		
+
 				// Writes List of playlists back into playlists.csv
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE));
 			writer.writeAll(allRows);
 			writer.flush();
             writer.close();
 		}
-		
+
 		catch(Exception e){
 			e.printStackTrace();
 		}

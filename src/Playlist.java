@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.io.*;
 import com.opencsv.*;
+import org.json.simple.*;
 
 public class Playlist{
 
@@ -29,6 +30,19 @@ public class Playlist{
 		this.updatePlaylist();
 	}
 
+	public JSONObject toJSON(){
+		JSONObject playlist = new JSONObject();
+		playlist.put("playlistName", this.playlistName);
+		playlist.put("playlistId", this.playlistId);
+		playlist.put("createDate", this.createDate);
+		JSONArray jSongs = new JSONArray();
+		for(String s : songs){
+			jSongs.add(s);
+		}
+		playlist.put("songs", jSongs);
+		return playlist;
+	}
+
 	public void removeSong(String songId){
 		this.songs.remove(songId);
 		this.updatePlaylist();
@@ -40,7 +54,7 @@ public class Playlist{
 
 	public void setName(String name){
 		this.playlistName = name;
-		updatePlaylist();
+		this.updatePlaylist();
 	}
 
 	public String share(){

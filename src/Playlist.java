@@ -9,20 +9,22 @@ public class Playlist{
 	private static final String PLAYLISTS_DATABASE = "./databases/playlists.csv"; // Location of playlists.csv file
 	private String playlistName;
 	public String playlistId;
-	public Date createDate;
+	public String createDate;
 	private ArrayList<String> songs;
 
 	public Playlist(){
 		this.playlistId = UUID.randomUUID().toString();
 		this.songs = new ArrayList<String>();
-		this.createDate = new Date();
-		updatePlaylist();
+		this.createDate = new Date().toString();
+		this.updatePlaylist();
 	}
 
 	public Playlist(String playlistId){
 		this.playlistId = playlistId;
 		this.songs = new ArrayList<String>(); // Must read in songs from old playlist
 		this.songs = getSongsInPlaylist(this.songs);
+		this.playlistName = getPlaylistNameandDate()[0];
+		this.createDate = getPlaylistNameandDate()[1];
 	}
 
 	public void addSong(String songId){
@@ -135,15 +137,31 @@ public class Playlist{
 						songs.add(record[i]);
 					}
 				}
-			}
-
+			}			
 			return songs;
 		}
-
-		catch (Exception e){
-
-		}
-
+		catch (Exception e){	
+		}	
 		return songs;
+	}
+	
+	private String[] getPlaylistNameandDate(){
+		String[] nameAndDate = new String[2];
+		try{
+			CSVReader reader = new CSVReader(new FileReader(PLAYLISTS_DATABASE), ',', '"', 0);
+			List<String[]> allRows = reader.readAll();			
+			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
+				String[] record = iterator.next();
+				if (record[1].equals(playlistId)) {
+					nameAndDate[0] = record[3];
+					nameAndDate[1] = record[5];
+				}
+			}			
+			return nameAndDate;
+		}
+		catch (Exception e){	
+		}
+		
+		return nameAndDate;
 	}
 }

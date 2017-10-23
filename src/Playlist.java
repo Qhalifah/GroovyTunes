@@ -124,7 +124,7 @@ public class Playlist{
 		return collect;
 	}
 
-	private ArrayList<String> getSongsInPlaylist(ArrayList<String> songs){
+	public ArrayList<String> getSongsInPlaylist(ArrayList<String> songs){
 		try{
 			CSVReader reader = new CSVReader(new FileReader(PLAYLISTS_DATABASE), ',', '"', 0);
 			List<String[]> allRows = reader.readAll();

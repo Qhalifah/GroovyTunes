@@ -10,11 +10,26 @@ public class User{
         private static final String USERS_DATABASE = "./databases/users.csv";
 	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 	private UserAccountDetails userDetails;
+	utility u = new utility();
 
 	public User(String username, String password, String firstName, String lastName, Date dob){
 		this.username = username;
 		this.password = password;
 		this.userDetails = new UserAccountDetails(firstName, lastName, dob, new Date());
+
+		Playlist playlist = new Playlist();
+
+		playlist.setName("All Songs");
+		try{
+			ArrayList<Song> songs = u.getAllSongs();
+			for(Song s : songs){
+				playlist.addSong(s.songId);
+			}
+		}catch(Exception e){
+
+		}
+		playlists.add(playlist);
+
 	}
 
 

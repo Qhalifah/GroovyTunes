@@ -42,6 +42,7 @@ public class Playlist{
 
 	public void setName(String name){
 		this.playlistName = name;
+		updatePlaylist();
 	}
 
 	public String share(){
@@ -108,13 +109,12 @@ public class Playlist{
 		String collect = songs.stream().collect(Collectors.joining(","));
 		return collect;
 	}
-	
-	
+
 	private ArrayList<String> getSongsInPlaylist(ArrayList<String> songs){
 		try{
 			CSVReader reader = new CSVReader(new FileReader(PLAYLISTS_DATABASE), ',', '"', 0);
 			List<String[]> allRows = reader.readAll();
-			
+
 			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
 				String[] record = iterator.next();
 				if (record[1].equals(playlistId)) {

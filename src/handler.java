@@ -84,6 +84,18 @@ public class handler{
 					toSend.put("message", playlistToRemove.toJSON());
 					session.getRemote().sendString(toSend.toString());
 					break;
+				case "changeName":
+					String playlistIdName = (String) msgJSON.get("id");
+					String newName = (String) msgJSON.get("name");
+					Playlist playlistToName = new Playlist(playlistIdName);
+					playlistToName.setName(newName);
+					toSend.put("type", "retDispPlaylist");
+					toSend.put("message", playlistToName.toJSON());
+					session.getRemote().sendString(toSend.toString());
+					toSend.put("type", "retGetPlaylists");
+					toSend.put("message", admin.getPlaylists());
+					session.getRemote().sendString(toSend.toString());
+					break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

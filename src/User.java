@@ -47,6 +47,7 @@ public class User{
 		JSONArray playlistsIds = new JSONArray();
 		for(Playlist p : playlists){
 			JSONObject playlist = new JSONObject();
+			p = new Playlist(p.playlistId);
 			playlist.put("playlistId", p.playlistId);
 			playlist.put("playlistName", p.getName());
 			playlistsIds.add(playlist);

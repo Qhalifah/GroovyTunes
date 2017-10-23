@@ -5,7 +5,33 @@ var user = {};
 var playlists = {};
 var playlist = {};
 window.onload = function() {
-    $( "#dialog" ).hide();
+
+    var onload = true;
+    var originalValue;
+    $('#playlistTitle').on('dblclick', function(){
+        originalValue = $(this).text();
+        console.log(originalValue)
+        $(this).text('');
+        $("<input type='text'>").appendTo(this).focus();
+    });
+    $('#playlistTitle').on('focusout', 'input', function(){
+        if($(this).val() == '' || $(this).val() == originalValue){
+            $(this).parent().text(originalValue);
+            console.log('ding');
+        }else{
+            var msg = {
+                type: 'changeName',
+                id: playlist.playlistId,
+                name: $(this).val(),
+            };
+            socket.send(JSON.stringify(msg));
+        }
+        $(this).remove();
+    });
+
+
+
+
   socket = new WebSocket("ws://127.0.0.1:8080");
   socket.onopen = function() {
     console.log("Connected!");
@@ -36,10 +62,13 @@ window.onload = function() {
         case "retGetPlaylists":
             playlists = message.message;
             dispPlaylists();
+            if(onload){
             var p = _.find(playlists, function(playlist){
                 return playlist.playlistName == "All Songs";
             });
             dispPlaylist(p.playlistId);
+            onload = false;
+            }
             break;
         case "retDispPlaylist":
             playlist = message.message;
@@ -56,26 +85,27 @@ window.onload = function() {
 };
 
 function showPlaylist() {
-  var fields = ['title', 'albumartist', 'album', 'genre', 'duration']
-  var html = '<table class="table table-hover"><tr>'
+  var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
+  var html = '<table class="table table-hover"><tr>';
   _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
-  html += '</tr>'
+  html += '</tr>';
   _.each(songs, function(_meta, _src) {
       if(!_.contains(playlist.songs, _meta.songId))return;
-    html += '<tr>'
+    html += '<tr>';
     _src = _src.replace(/\\/g,'\\\\');
     _.each(fields, function(_field){
         var toDisp = (_meta[_field] || '');
-      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>'
+      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
     });
-    if(_.size(playlists) > 1){
-        html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>'
+    if(_.size(playlists) > 1 && playlist.playlistName == "All Songs"){
+        html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
     }
-    html += '<td onclick="removeSong(\'' + _meta.songId + '\')">-</td>'
-    html += '</tr>'
+    html += '<td onclick="removeSong(\'' + _meta.songId + '\')">-</td>';
+    html += '</tr>';
   });
-  html += '</table>'
+  html += '</table>';
   $('#songs').html(html);
+  $('#playlistTitle').html((playlist.playlistName != "null" ? playlist.playlistName : "New Playlist"));
 }
 
 function removeSong(_song){

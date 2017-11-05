@@ -2,8 +2,9 @@
 <project default="main" name="GroovyTunes">
     <property name="src.dir" value="src/" />
     <property name="build.dir" value="build/" />
+    <property name="lib.dir" value="lib/" />
     <property name="classes.dir" value="bin/" />
-    <property name="mainclass" value="WebSocket" />
+    <property name="mainclass" value="server.WebSocket" />
     <path id="tunes.classpath">
         <fileset dir="./lib/">
         <include name="*.jar" />
@@ -28,7 +29,7 @@
     <target name="build">
         <mkdir dir="${build.dir}" />
         <jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-            <zipgroupfileset dir="./lib/" includes="*.jar" />   
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar" />   
             <manifest>
                 <attribute name="Main-Class" value="${mainclass}" />
                 <attribute name="Class-path" value="." />

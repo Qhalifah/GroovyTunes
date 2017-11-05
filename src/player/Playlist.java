@@ -1,10 +1,12 @@
+package player;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.io.*;
 import com.opencsv.*;
 import org.json.simple.*;
 
-public class Playlist{
+public class Playlist implements Playable {
 
 	private static final String PLAYLISTS_DATABASE = "./databases/playlists.csv"; // Location of playlists.csv file
 	private String playlistName;

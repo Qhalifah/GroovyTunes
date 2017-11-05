@@ -1,0 +1,4 @@
+# Lines starting with # will be ignored
+# Format of date used: yyyy-MM-dd. If changing this format, please change it in util/Constants.java too
+# Structure: username, password, firstname, lastname, dob, date-joined
+admin, password, Bob, Loblaw, 1993-04-01, 2011-01-01

@@ -1,3 +1,5 @@
+package user;
+
 import java.util.Date;
 import org.json.simple.JSONObject;
 

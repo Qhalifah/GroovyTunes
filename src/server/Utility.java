@@ -1,3 +1,4 @@
+package server;
 
 import org.jaudiotagger.audio.*;
 import org.jaudiotagger.tag.*;
@@ -6,6 +7,9 @@ import java.io.*;
 import org.json.simple.*;
 import com.opencsv.*;
 import java.util.stream.Collectors;
+
+import player.Playlist;
+import player.Song;
 
 
 public class Utility {

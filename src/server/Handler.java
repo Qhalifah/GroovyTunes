@@ -1,7 +1,15 @@
+package server;
+
 import java.io.IOException;
 import java.util.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
+
+import player.Playlist;
+import player.Song;
+import user.User;
+import utils.Constants;
+import auth.Authenticate;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -12,10 +20,9 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 @WebSocket
 public class Handler {
-	private Session session;
+	private GroovySession session;
 	Utility u = new Utility();
 	JSONParser parser = new JSONParser();
-	User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
 
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
@@ -30,11 +37,17 @@ public class Handler {
     @OnWebSocketConnect
     public void onConnect(Session session) throws Exception{
         System.out.println("Connect: " + session.getRemoteAddress().getAddress());
-        this.session = session;
+        this.session = new GroovySession(session);
+
+        // I am adding a user object in the session for now.
+        // After auth flow, this will be added later
+        User u = Authenticate.authUser("admin", "password");
+        this.session.add(Constants.USER_SESSION_KEY, u);
     }
 
     @OnWebSocketMessage
     public void onMessage(String message) {
+    	User admin = (User) session.get(Constants.USER_SESSION_KEY);
 		try {
 			JSONObject msgJSON = (JSONObject) parser.parse(message);
 			String type = (String) msgJSON.get("type");

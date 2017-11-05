@@ -1,21 +1,27 @@
+package user;
+
 import org.json.simple.*;
 import java.util.*;
 import com.opencsv.*;
 import java.util.stream.Collectors;
 import java.io.*;
 
-public class User{
+import player.Playlist;
+import player.Song;
+import server.Utility;
+
+public class User {
 	private String username;
 	private String password;
-        private static final String USERS_DATABASE = "./databases/users.csv";
+	private static final String USERS_DATABASE = "./databases/users.csv";
 	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 	private UserAccountDetails userDetails;
 	Utility u = new Utility();
 
-	public User(String username, String password, String firstName, String lastName, Date dob){
+	public User(String username, String password, String firstName, String lastName, Date dob, Date dateJoined){
 		this.username = username;
 		this.password = password;
-		this.userDetails = new UserAccountDetails(firstName, lastName, dob, new Date());
+		this.userDetails = new UserAccountDetails(firstName, lastName, dob, dateJoined);
 
 		Playlist playlist = new Playlist();
 

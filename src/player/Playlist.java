@@ -29,6 +29,10 @@ public class Playlist implements Playable {
 		this.createDate = getPlaylistNameandDate()[1];
 	}
 
+	public void play() {
+
+	}
+
 	public void addSong(String songId){
 		this.songs.add(songId);
 		this.updatePlaylist();

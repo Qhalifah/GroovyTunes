@@ -6,7 +6,7 @@ import com.opencsv.*;
 import java.util.stream.Collectors;
 import java.io.*;
 
-public class Song{
+public class Song implements Playable {
 	public String title;
 	public String albumartist;
 	public String album;
@@ -33,6 +33,10 @@ public class Song{
 		this.songId = songId;
 	}
 
+
+	public void play() {
+
+	}
 
 	public JSONObject getMetaData(){
 		JSONObject obj = new JSONObject();

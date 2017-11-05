@@ -6,82 +6,117 @@ import com.opencsv.*;
 import java.util.stream.Collectors;
 import java.io.*;
 
+import player.Playable;
 import player.Playlist;
 import player.Song;
-import server.Utility;
+import utils.Utility;
+import utils.Constants;
 
+/**
+ * This class contains a list of playlist available to a user. It also maps to UserAccountDetails.
+ */
 public class User {
-	private String username;
-	private String password;
-	private static final String USERS_DATABASE = "./databases/users.csv";
-	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
-	private UserAccountDetails userDetails;
-	Utility u = new Utility();
+	private List<Playable> playlists;
+	private UserAccountDetails details;
 
-	public User(String username, String password, String firstName, String lastName, Date dob, Date dateJoined){
-		this.username = username;
-		this.password = password;
-		this.userDetails = new UserAccountDetails(firstName, lastName, dob, dateJoined);
-
-		Playlist playlist = new Playlist();
-
-		playlist.setName("All Songs");
-		try{
-			ArrayList<Song> songs = u.getAllSongs();
-			for(Song s : songs){
-				playlist.addSong(s.songId);
+	/**
+	 * Created one instance of User using given values.
+	 * This instance is created from Authenticate class after letting the user log in
+	 */
+	public User(String username, String password, String firstName, String lastName,
+		Date dob, Date dateJoined) {
+		this.details = new UserAccountDetails(username, password, firstName, lastName,
+			dob, dateJoined);
+		playlists = new ArrayList<>(Constants.MAX_PLAYLISTS + 1);
+		Playlist allSongs = new Playlist();
+		allSongs.setName("All songs");
+		try {
+			List<Playable> songs = Utility.getAllSongs();
+			for(Playable s : songs){
+				allSongs.addSong(s);
 			}
-		}catch(Exception e){
+		} catch(Exception e) {
 
 		}
-		playlists.add(playlist);
-
+		playlists.add(allSongs);
 	}
 
 
-	public void createPlaylist(){
-		Playlist playlist = new Playlist();
-		playlists.add(playlist);
-	}
-
-	public void deletePlaylist(String playlistId){
-		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId));
-		Playlist.removePlaylist(playlistId);
-	}
-
-	public JSONArray getPlaylists(){
-		JSONArray playlistsIds = new JSONArray();
-		for(Playlist p : playlists){
-			JSONObject playlist = new JSONObject();
-			p = new Playlist(p.playlistId);
-			playlist.put("playlistId", p.playlistId);
-			playlist.put("playlistName", p.getName());
-			playlistsIds.add(playlist);
+	/**
+	 * Adds a new playlist to previous collection only if it is permitted
+	 * It is permitted only if user is a PREMIUM member or the number of playlists
+	 * is below the threshold.
+	 * @return true if a new playlist is created, false otherwise
+	 */
+	public boolean createPlaylist() {
+		boolean created = false;
+		if (details.isPremiumMember() || playlists.size() < Constants.MAX_PLAYLISTS) {
+			Playlist playlist = new Playlist();
+			created = true;
+			playlists.add(playlist);
+			// TODO: update the database
 		}
-		return playlistsIds;
+		return created;
 	}
 
-	public JSONObject getUserInfo(){
-		return this.userDetails.getUserDetails();
-	}
-
-	public static void updateUserInfo(String username, String firstName, String lastName, Date dob, Date dateJoined) throws IOException{
-		removeUser(username);
-
-		try{
-			boolean status = false;
-			CSVWriter writer = new CSVWriter(new FileWriter(USERS_DATABASE, true)); // true flag for appending to end of file
-			String[] record = ("Id," + username + ",fname," + firstName + ",lname," + lastName + ",dob," + dob + ",datejoin," + dateJoined + ",membershipStatus," + status ).split(",");
-			writer.writeNext(record);
-			writer.flush();
-			writer.close();
+	/**
+	 * Deletes a playlist if present
+	 * @return true if playlist is found and deleted, false otherwise.
+	 * If playlist is found, we make sure to delete it
+	 */
+	public boolean deletePlaylist(String playlistId) {
+		// Removing use of lambdas to make it compatible with Java7
+		for(int i = 0; i < playlists.size(); ++i) {
+			boolean found = false;
+			Playlist playlist = (Playlist) playlists.get(i);
+			if(playlist.getID().equals(playlistId)) {
+				found = true;
+				playlists.remove(playlist);
+			}
 		}
-
-		catch(Exception e){
-			e.printStackTrace();
-		}
+		// TODO: update the database
+		return found;
 	}
 
+	/**
+	 * Gives all playlists present for a user.
+	 * Return values include name and playlist ID only
+	 * @return list of playlists in JSON form
+	 */
+	public JSONArray getPlaylists() {
+		JSONArray playlistsJSON = new JSONArray();
+		for(Playable p : playlists) {
+			Playlist playlist = (Playlist) p;
+			JSONObject playlistJSON = new JSONObject();
+			playlistJSON.put("playlistId", playlist.getID());
+			playlistJSON.put("playlistName", playlist.getName());
+			playlistsJSON.add(playlistJSON);
+		}
+		return playlistsJSON;
+	}
+
+	/**
+	 * Returns user account details
+	 * @return account details in JSON form
+	 */
+	public JSONObject getUserInfo() {
+		return this.details.getUserDetails();
+	}
+
+	/**
+	 * Updates the user details.
+	 * @return true if the details are updated, false otherwise
+	 */
+	public boolean updateUserInfo(String username, String firstName, String lastName, 
+		Date dob, Date dateJoined) throws IOException {
+		return details.updateUserDetails(username, firstName, lastName, dob, dateJoined);
+	}
+
+
+	/**
+	 * commenting out this method. Do we need to provide this functionality as well?
+	 */
+	/*
 	public static void removeUser(String username){
 		try{
 
@@ -107,5 +142,6 @@ public class User {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 }

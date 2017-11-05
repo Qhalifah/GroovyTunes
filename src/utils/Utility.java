@@ -1,4 +1,4 @@
-package server;
+package utils;
 
 import org.jaudiotagger.audio.*;
 import org.jaudiotagger.tag.*;
@@ -10,13 +10,33 @@ import java.util.stream.Collectors;
 
 import player.Playlist;
 import player.Song;
+import player.Playable;
 
 
 public class Utility {
 	private static final String SONGS_DATABASE = "./databases/songs.csv";
 
+	private static List<Song> allSongs = null;
 
-	public static void main(String args[])throws Exception{
+	public static void readAllSongs() throws Exception {
+		allSongs = new ArrayList<>();
+		CSVReader reader = new CSVReader(new FileReader(Constants.SONG_CSV), ',', '"', 0);
+		List<String[]> allRows = reader.readAll();
+		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
+			String[] record = iterator.next();
+			Song song = createSong(record);
+			allSongs.add(song);
+		}		
+	}
+
+	public static List<Song> getAllSongs() throws Exception {
+		if(allSongs == null) {
+			readAllSongs();
+		}
+		return allSongs;
+	}
+
+	public static void main(String args[]) throws Exception {
 		Utility u = new Utility();
 		new File(SONGS_DATABASE).delete();
 		u.updateSongDB("./songs");
@@ -35,19 +55,6 @@ public class Utility {
 		return songs;
 	}
 
-	public ArrayList<Song> getAllSongs() throws Exception {
-		ArrayList<Song> songs = new ArrayList<Song>();
-
-		CSVReader reader = new CSVReader(new FileReader(SONGS_DATABASE), ',', '"', 0);
-		List<String[]> allRows = reader.readAll();
-		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
-			String[] record = iterator.next();
-			Song song = createSong(record);
-			songs.add(song);
-		}
-		return songs;
-	}
-
 	public void updateSongDB(String dir) throws Exception {
 		File[] files = new File(dir).listFiles();
 		ArrayList<Song> songs = new ArrayList<Song>();
@@ -57,7 +64,7 @@ public class Utility {
 		}
 	}
 
-	public Song createSong(String[] record) throws Exception{
+	private static Song createSong(String[] record) throws Exception {
 		Song song = new Song(
 			record[3],
 			record[5],

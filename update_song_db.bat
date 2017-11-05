@@ -1,3 +1,3 @@
-java -cp ".;bin;lib/*" utility
+java -cp ".;bin;lib/*" Utility
 
 pause

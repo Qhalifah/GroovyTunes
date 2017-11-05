@@ -11,9 +11,9 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 @WebSocket
-public class handler{
+public class Handler {
 	private Session session;
-	utility u = new utility();
+	Utility u = new Utility();
 	JSONParser parser = new JSONParser();
 	User admin = new User("admin", "password", "Bob", "Loblaw", new Date(69, 0, 1));
 

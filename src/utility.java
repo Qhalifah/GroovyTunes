@@ -8,12 +8,12 @@ import com.opencsv.*;
 import java.util.stream.Collectors;
 
 
-public class utility {
+public class Utility {
 	private static final String SONGS_DATABASE = "./databases/songs.csv";
 
 
 	public static void main(String args[])throws Exception{
-		utility u = new utility();
+		Utility u = new Utility();
 		new File(SONGS_DATABASE).delete();
 		u.updateSongDB("./songs");
 	}

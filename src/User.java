@@ -10,7 +10,7 @@ public class User{
         private static final String USERS_DATABASE = "./databases/users.csv";
 	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
 	private UserAccountDetails userDetails;
-	utility u = new utility();
+	Utility u = new Utility();
 
 	public User(String username, String password, String firstName, String lastName, Date dob){
 		this.username = username;

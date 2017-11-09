@@ -1,24 +1,27 @@
 package auth;
 
-import java.util.*;
-import java.io.*;
-import java.text.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import utils.Constants;
 import user.User;
+import utils.Constants;
 
 public class Authenticate {
 
     /**
-     * This method authenticates user. It takes in username and password as string, and checks it againts
+     * This method authenticates user. It takes in user name and password as string, and checks it against
      * values in database. If there exists a user, it returns the user.
-     * @param username: username provided at the login
+     * @param username: user name provided at the login
      * @param password: password provided at the login
      * @return User u if there exists a user. NULL otherwise
      * @throws IOException if unable to read the database
      * @throws ParseException if unable to parse date from string
      */
-    public static User authUser(String username, String password) throws Exception {
+    public static User authUser(String username, String password) throws IOException, ParseException {
         User u = null;
         BufferedReader br = new BufferedReader(new FileReader(Constants.USER_CSV));
         String line = "";
@@ -34,6 +37,7 @@ public class Authenticate {
                 }
             }
         }
+        br.close();
         return u;
     }
 }

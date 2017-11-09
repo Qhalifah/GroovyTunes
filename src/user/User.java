@@ -1,22 +1,18 @@
 package user;
 
-import org.json.simple.*;
-import java.util.*;
-import com.opencsv.*;
-import java.util.stream.Collectors;
-import java.io.*;
+import java.io.IOException;
+import java.util.Date;
 
-import player.Playable;
-import player.Playlist;
-import player.Song;
-import utils.Utility;
-import utils.Constants;
+import org.json.simple.JSONObject;
+
+import player.Player;
+import player.PlayerFactory;
 
 /**
  * This class contains a list of playlist available to a user. It also maps to UserAccountDetails.
  */
 public class User {
-	private List<Playable> playlists;
+	private Player player;
 	private UserAccountDetails details;
 
 	/**
@@ -27,74 +23,15 @@ public class User {
 		Date dob, Date dateJoined) {
 		this.details = new UserAccountDetails(username, password, firstName, lastName,
 			dob, dateJoined);
-		playlists = new ArrayList<>(Constants.MAX_PLAYLISTS + 1);
-		Playlist allSongs = new Playlist();
-		allSongs.setName("All songs");
-		try {
-			List<Playable> songs = Utility.getAllSongs();
-			for(Playable s : songs){
-				allSongs.addSong(s);
-			}
-		} catch(Exception e) {
-
-		}
-		playlists.add(allSongs);
+		player = null;
 	}
-
-
-	/**
-	 * Adds a new playlist to previous collection only if it is permitted
-	 * It is permitted only if user is a PREMIUM member or the number of playlists
-	 * is below the threshold.
-	 * @return true if a new playlist is created, false otherwise
-	 */
-	public boolean createPlaylist() {
-		boolean created = false;
-		if (details.isPremiumMember() || playlists.size() < Constants.MAX_PLAYLISTS) {
-			Playlist playlist = new Playlist();
-			created = true;
-			playlists.add(playlist);
-			// TODO: update the database
+	
+	public Player getPlayer() {
+		if(player == null) {
+			player = PlayerFactory.getPlayer(this);
 		}
-		return created;
+		return player;
 	}
-
-	/**
-	 * Deletes a playlist if present
-	 * @return true if playlist is found and deleted, false otherwise.
-	 * If playlist is found, we make sure to delete it
-	 */
-	public boolean deletePlaylist(String playlistId) {
-		// Removing use of lambdas to make it compatible with Java7
-		for(int i = 0; i < playlists.size(); ++i) {
-			boolean found = false;
-			Playlist playlist = (Playlist) playlists.get(i);
-			if(playlist.getID().equals(playlistId)) {
-				found = true;
-				playlists.remove(playlist);
-			}
-		}
-		// TODO: update the database
-		return found;
-	}
-
-	/**
-	 * Gives all playlists present for a user.
-	 * Return values include name and playlist ID only
-	 * @return list of playlists in JSON form
-	 */
-	public JSONArray getPlaylists() {
-		JSONArray playlistsJSON = new JSONArray();
-		for(Playable p : playlists) {
-			Playlist playlist = (Playlist) p;
-			JSONObject playlistJSON = new JSONObject();
-			playlistJSON.put("playlistId", playlist.getID());
-			playlistJSON.put("playlistName", playlist.getName());
-			playlistsJSON.add(playlistJSON);
-		}
-		return playlistsJSON;
-	}
-
 	/**
 	 * Returns user account details
 	 * @return account details in JSON form
@@ -112,7 +49,10 @@ public class User {
 		return details.updateUserDetails(username, firstName, lastName, dob, dateJoined);
 	}
 
-
+	public boolean isPremiumUser() {
+		return details.isPremiumMember();
+	}
+	
 	/**
 	 * commenting out this method. Do we need to provide this functionality as well?
 	 */

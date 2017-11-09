@@ -1,15 +1,15 @@
 package user;
 
-import java.util.Date;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import utils.Constants;

@@ -1,5 +1,8 @@
 package player;
 
+import org.json.simple.JSONObject;
+
 public interface Playable {
-    public void play();
+    public String[] play();
+    public JSONObject getAsJSON();
 }

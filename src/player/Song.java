@@ -1,10 +1,11 @@
 package player;
 
-import org.json.simple.*;
-import java.util.*;
-import com.opencsv.*;
-import java.util.stream.Collectors;
-import java.io.*;
+import java.io.FileWriter;
+import java.util.UUID;
+
+import org.json.simple.JSONObject;
+
+import com.opencsv.CSVWriter;
 
 public class Song implements Playable {
 	public String title;
@@ -34,10 +35,12 @@ public class Song implements Playable {
 	}
 
 
-	public void play() {
+	public String[] play() {
+		return null;
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public JSONObject getMetaData(){
 		JSONObject obj = new JSONObject();
 		obj.put("title", this.title);
@@ -64,6 +67,14 @@ public class Song implements Playable {
 		writer.writeNext(record);
 		writer.flush();
 		writer.close();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject getAsJSON() {
+		JSONObject songJSON = new JSONObject();
+		songJSON.put("id", songId);
+		songJSON.put("title", title);
+		return songJSON;
 	}
 
 

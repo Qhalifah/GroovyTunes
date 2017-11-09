@@ -6,7 +6,7 @@
     <property name="classes.dir" value="bin/" />
     <property name="mainclass" value="server.WebSocket" />
     <path id="tunes.classpath">
-        <fileset dir="./lib/">
+        <fileset dir="${lib.dir}">
         <include name="*.jar" />
     </fileset>
     </path>

@@ -1,10 +1,19 @@
 package player;
 
-import java.util.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import java.io.*;
-import com.opencsv.*;
-import org.json.simple.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 public class Playlist implements Playable {
 
@@ -30,15 +39,17 @@ public class Playlist implements Playable {
 		this.createDate = getPlaylistNameandDate()[1];
 	}
 
-	public void play() {
-
+	public String[] play() {
+		return null;
 	}
 
-	public void addSong(String songId){
-		this.songs.add(songId);
+	public boolean addSong(String songId){
+		//this.songs.add(songId);
 		this.updatePlaylist();
+		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public JSONObject toJSON(){
 		JSONObject playlist = new JSONObject();
 		playlist.put("playlistName", this.name);
@@ -52,9 +63,10 @@ public class Playlist implements Playable {
 		return playlist;
 	}
 
-	public void removeSong(String songId){
+	public boolean removeSong(String songId){
 		this.songList.remove(songId);
 		this.updatePlaylist();
+		return false;
 	}
 
 	public String getName() {
@@ -81,7 +93,7 @@ public class Playlist implements Playable {
 
 		try{
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE, true)); // true flag for appending to end of file
-			String songList = arrayListParser(songList);
+			//String songList = arrayListParser(songList);
 				// record: ["Playlist ID:", playlistId, "Playlist Name:", playlistName, "Date Created:", createdDate, "Song ID's:", songList]
 			String[] record = ("Playlist ID:" + "," + ID + "," + "Playlist Name:" + "," + name + "," + "Date Created:" + "," + createDate + "," + "Song ID's:" + "," + songList).split(",");
 			writer.writeNext(record);
@@ -98,6 +110,7 @@ public class Playlist implements Playable {
 		// Reads in all playlists from playlists.csv
 		// Removes the playlist based on playlistId
 		// Rewrites playlists back into playlists.csv
+	@SuppressWarnings({ "resource", "deprecation" })
 	public static void removePlaylist(String ID){
 		try{
 				//Build reader instance
@@ -130,11 +143,13 @@ public class Playlist implements Playable {
 	}
 		// Converts ArrayList of Strings into a single comma seperated string
 		// of all songs in playlist
+	@SuppressWarnings("unused")
 	private String arrayListParser(ArrayList<String> songs){
 		String collect = songList.stream().collect(Collectors.joining(","));
 		return collect;
 	}
 
+	@SuppressWarnings({ "deprecation", "resource" })
 	public ArrayList<String> getSongsInPlaylist(ArrayList<String> songs){
 		try{
 			CSVReader reader = new CSVReader(new FileReader(PLAYLISTS_DATABASE), ',', '"', 0);
@@ -156,6 +171,7 @@ public class Playlist implements Playable {
 		return songList;
 	}
 	
+	@SuppressWarnings({ "deprecation", "resource" })
 	private String[] getPlaylistNameandDate(){
 		String[] nameAndDate = new String[2];
 		try{
@@ -174,5 +190,28 @@ public class Playlist implements Playable {
 		}
 		
 		return nameAndDate;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getNameAsJSON() {
+		JSONObject playlistJSON = new JSONObject();
+		playlistJSON.put("name", name);
+		return playlistJSON;
+	}
+
+	public void rename(String newName) {
+		this.name = newName;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getAsJSON() {
+		JSONArray allSongsAsJSON = new JSONArray();
+		for(Playable p: songs) {
+			allSongsAsJSON.add(p.getAsJSON());
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("name", name);
+		obj.put("songs", allSongsAsJSON);
+		return obj;
 	}
 }

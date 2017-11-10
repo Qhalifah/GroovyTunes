@@ -46,4 +46,8 @@ public class GroovySession {
     public RemoteEndpoint getRemote() {
         return session.getRemote();
     }
+    
+    public void invalidate() {
+    	session.close();
+    }
 }

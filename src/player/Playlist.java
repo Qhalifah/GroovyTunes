@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONArray;
@@ -19,32 +18,39 @@ public class Playlist implements Playable {
 
 	private static final String PLAYLISTS_DATABASE = "./databases/playlists.csv"; // Location of playlists.csv file
 	private String name;
-	private String ID;
+	//private String ID;
 	public String createDate;
 	private ArrayList<String> songList;
 	private List<Playable> songs;
 
 	public Playlist(){
-		this.ID = UUID.randomUUID().toString();
+		//this.ID = UUID.randomUUID().toString();
 		this.songList = new ArrayList<String>();
 		this.createDate = new Date().toString();
 		this.updatePlaylist();
 	}
 
 	public Playlist(String ID){
-		this.ID = ID;
+		//this.ID = ID;
 		this.songList = new ArrayList<String>(); // Must read in songs from old playlist
 		this.songList = getSongsInPlaylist(this.songList);
 		this.name = getPlaylistNameandDate()[0];
 		this.createDate = getPlaylistNameandDate()[1];
 	}
 
-	public String[] play() {
-		return null;
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject play() {
+		JSONObject playlist = new JSONObject();
+		playlist.put("name", name);
+		for(Playable p: songs) {
+			playlist.put("song", p.play());
+		}
+		return playlist;
 	}
 
 	public boolean addSong(String songId){
-		//this.songs.add(songId);
+		//this.songs.add(songID);
 		this.updatePlaylist();
 		return false;
 	}
@@ -53,7 +59,7 @@ public class Playlist implements Playable {
 	public JSONObject toJSON(){
 		JSONObject playlist = new JSONObject();
 		playlist.put("playlistName", this.name);
-		playlist.put("playlistId", this.ID);
+		//playlist.put("playlistId", this.ID);
 		playlist.put("createDate", this.createDate);
 		JSONArray jSongs = new JSONArray();
 		for(String s : songList){
@@ -73,10 +79,6 @@ public class Playlist implements Playable {
 		return this.name;
 	}
 
-	public String getID() {
-		return this.ID;
-	}
-
 	public void setName(String name){
 		this.name = name;
 		this.updatePlaylist();
@@ -89,14 +91,14 @@ public class Playlist implements Playable {
 
 	public void updatePlaylist(){
 			// Removed existing playlist from database
-		removePlaylist(ID);
+		//removePlaylist(ID);
 
 		try{
 			CSVWriter writer = new CSVWriter(new FileWriter(PLAYLISTS_DATABASE, true)); // true flag for appending to end of file
 			//String songList = arrayListParser(songList);
 				// record: ["Playlist ID:", playlistId, "Playlist Name:", playlistName, "Date Created:", createdDate, "Song ID's:", songList]
-			String[] record = ("Playlist ID:" + "," + ID + "," + "Playlist Name:" + "," + name + "," + "Date Created:" + "," + createDate + "," + "Song ID's:" + "," + songList).split(",");
-			writer.writeNext(record);
+			//String[] record = ("Playlist ID:" + "," + ID + "," + "Playlist Name:" + "," + name + "," + "Date Created:" + "," + createDate + "," + "Song ID's:" + "," + songList).split(",");
+			//writer.writeNext(record);
 			writer.flush();
 			writer.close();
 		}
@@ -157,12 +159,12 @@ public class Playlist implements Playable {
 
 			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
 				String[] record = iterator.next();
-				if (record[1].equals(ID)) {
+				//if (record[1].equals(ID)) {
 					// Get songs and add to ArrayList
 					for(int i = 7; i < record.length; i++){
 						songList.add(record[i]);
 					}
-				}
+				//}
 			}			
 			return songList;
 		}
@@ -179,10 +181,10 @@ public class Playlist implements Playable {
 			List<String[]> allRows = reader.readAll();			
 			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
 				String[] record = iterator.next();
-				if (record[1].equals(ID)) {
+				//if (record[1].equals(ID)) {
 					nameAndDate[0] = record[3];
 					nameAndDate[1] = record[5];
-				}
+				//}
 			}			
 			return nameAndDate;
 		}
@@ -204,6 +206,7 @@ public class Playlist implements Playable {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public JSONObject getAsJSON() {
 		JSONArray allSongsAsJSON = new JSONArray();
 		for(Playable p: songs) {

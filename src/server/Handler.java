@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -14,6 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import auth.Authenticate;
+import auth.Authenticate.AuthResult;
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
 import user.User;
@@ -26,6 +28,7 @@ public class Handler {
 	private GroovySession session;
 	Utility u = new Utility();
 	JSONParser parser;
+	UserRequestHelper userHelper;
 
 	public Handler() {
 		parser = new JSONParser();
@@ -45,16 +48,17 @@ public class Handler {
 	public void onConnect(Session session) throws Exception {
 		System.out.println("Connect: " + session.getRemoteAddress().getAddress());
 		this.session = new GroovySession(session);
+		userHelper = new UserRequestHelper(this.session);
 
 		// I am adding a user object in the session for now.
 		// After auth flow, this will be added later
-		User u = Authenticate.authUser("admin", "password");
-		this.session.add(Constants.USER_SESSION_KEY, u);
+		AuthResult u = Authenticate.authUser("admin", "password");
+		this.session.add(Constants.USER_SESSION_KEY, u.getUser());
 	}
 
 	@SuppressWarnings("unchecked")
 	@OnWebSocketMessage
-	public void onMessage(String message) throws IOException, ParseException {
+	public void onMessage(String message) throws IOException, ParseException, ClassNotFoundException, SQLException {
 		JSONObject msgJSON = (JSONObject) parser.parse(message);
 		String level = (String) msgJSON.get("level");
 		System.out.println("Message: " + msgJSON);
@@ -166,7 +170,7 @@ public class Handler {
 
 			}
 		} else {
-			// TODO: handle user-level messages
+			userHelper.onMessage(msgJSON);
 		}
 	}
 }

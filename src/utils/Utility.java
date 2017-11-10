@@ -1,95 +1,80 @@
 package utils;
 
-import org.jaudiotagger.audio.*;
-import org.jaudiotagger.tag.*;
-import java.util.*;
-import java.io.*;
-import org.json.simple.*;
-import com.opencsv.*;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
-import player.Playlist;
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
 import player.Song;
-import player.Playable;
-
 
 public class Utility {
-	private static final String SONGS_DATABASE = "./databases/songs.csv";
 
-	private static List<Song> allSongs = null;
-
-	public static void readAllSongs() throws Exception {
-		allSongs = new ArrayList<>();
-		CSVReader reader = new CSVReader(new FileReader(Constants.SONG_CSV), ',', '"', 0);
-		List<String[]> allRows = reader.readAll();
-		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
-			String[] record = iterator.next();
-			Song song = createSong(record);
-			allSongs.add(song);
-		}		
-	}
-
-	public static List<Song> getAllSongs() throws Exception {
-		if(allSongs == null) {
-			readAllSongs();
+	public static void updateSongDB(String directory, boolean clearPrevious) throws CannotReadException, IOException,
+			TagException, ReadOnlyFileException, InvalidAudioFrameException, ClassNotFoundException, SQLException {
+		Utility.log("Reading songs from directory");
+		File[] files = new File(directory).listFiles();
+		List<Song> songs = new ArrayList<>();
+		for (File file : files) {
+			songs.add(Utility.readSongFromFile(file));
 		}
-		return allSongs;
-	}
-
-	public static void main(String args[]) throws Exception {
-		Utility u = new Utility();
-		new File(SONGS_DATABASE).delete();
-		u.updateSongDB("./songs");
-	}
-
-	public JSONObject getMusic() throws Exception {
-		JSONObject songs = new JSONObject();
-
-		CSVReader reader = new CSVReader(new FileReader(SONGS_DATABASE), ',', '"', 0);
-		List<String[]> allRows = reader.readAll();
-		for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
-			String[] record = iterator.next();
-			Song song = createSong(record);
-			songs.put(record[13], song.getMetaData());
+		if (clearPrevious) {
+			Utility.log("Removing previous entries from DB");
+			String clearQuery = "DELETE FROM " + Constants.SONG_TABLE;
+			GroovyConnection.getConnection().prepareStatement(clearQuery).execute();
 		}
-		return songs;
-	}
-
-	public void updateSongDB(String dir) throws Exception {
-		File[] files = new File(dir).listFiles();
-		ArrayList<Song> songs = new ArrayList<Song>();
-		for(File file: files){
-			Song song = createSong(file);
-			song.addToDb(file.getPath());
+		Utility.log("Preparing to update DB");
+		String maxQuery = "SELECT MAX(ID) FROM " + Constants.SONG_TABLE;
+		int id = 0;
+		Statement stmt = GroovyConnection.getConnection().createStatement();
+		stmt.execute(maxQuery);
+		ResultSet resultSet = stmt.getResultSet();
+		if (resultSet.next())
+			id = resultSet.getInt(1);
+		String insertQuery = "INSERT INTO " + Constants.SONG_TABLE
+				+ "(ID, title, artist, genre, duration, album, url) VALUES " + "(?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(insertQuery);
+		Utility.log("Updating DB");
+		for (Song song : songs) {
+			id += 1;
+			statement.setInt(1, id);
+			statement.setString(2, song.getTitle());
+			statement.setString(3, song.getAlbumArtist());
+			statement.setString(4, song.getGenre());
+			statement.setDouble(5, song.getDuration());
+			statement.setString(6, song.getAlbum());
+			statement.setString(7, song.getURL());
+			statement.execute();
 		}
+
 	}
 
-	private static Song createSong(String[] record) throws Exception {
-		Song song = new Song(
-			record[3],
-			record[5],
-			record[7],
-			record[9],
-			Double.parseDouble(record[11]),
-			record[1]
-		);
-		return song;
-	}
-
-	public Song createSong(File file) throws Exception{
+	public static Song readSongFromFile(File file)
+			throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
 		AudioFile f = AudioFileIO.read(file);
 		Tag tag = f.getTag();
 		AudioHeader a = f.getAudioHeader();
-		Song song = new Song(
-			tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
-			tag.getFirst(FieldKey.ALBUM).replaceAll(",", ";"),
-			tag.getFirst(FieldKey.ALBUM_ARTIST).replaceAll(",", ";"),
-			tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"),
-			a.getTrackLength()
-		);
+		Song song = new Song(tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
+				tag.getFirst(FieldKey.ALBUM).replaceAll(",", ";"),
+				tag.getFirst(FieldKey.ALBUM_ARTIST).replaceAll(",", ";"),
+				tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"), a.getTrackLength(), file.getAbsolutePath());
 		return song;
 	}
 
-
-
+	public static void log(String message) {
+		System.out.println("[GROOVY TUNES]: " + message);
+	}
 }

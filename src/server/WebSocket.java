@@ -10,7 +10,13 @@ import utils.Utility;
 public class WebSocket {
 
     public static void main(String[] args) throws Exception{
-        Utility.readAllSongs();
+        if(args.length == 2) {
+        	if(args[0].equals("add"))
+        		Utility.updateSongDB(args[1], false);
+        	else if(args[0].equals("update"))
+        		Utility.updateSongDB(args[1], true);
+        	System.exit(0);
+        }
 
         Server server = new Server(8080);
         ServletContextHandler ctx = new ServletContextHandler();

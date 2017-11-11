@@ -17,7 +17,7 @@ public class PremiumPlayer extends Player {
 	@Override
 	public void createPlaylist(String name) throws PlaylistNotCreatedException {
 		try {
-			if(PlaylistOperations.createPlaylist(username, name, playlists.size()) != 1)
+			if(PlaylistOperations.createPlaylist(username, name) != 1)
 				throw new PlaylistNotCreatedException(Reason.UNKNOWN);
 			Playlist p = new Playlist(playlists.size(), name);
 			playlists.add(p);
@@ -29,8 +29,26 @@ public class PremiumPlayer extends Player {
 
 	@Override
 	public boolean addSongToPlaylist(String playlistName, int songID) throws IllegalOperationException {
-		// TODO Auto-generated method stub
-		return false;
+		Playlist playlist = null;
+		boolean added = false;
+		for(int i = 0; i < playlists.size(); ++i) {
+			Playlist p = (Playlist) playlists.get(i);
+			if(p.getName().equals(playlistName))
+				playlist = p;
+		}
+		if(playlist == null)
+			throw new IllegalOperationException();
+		for(int i = 0; i < songs.size(); ++i) {
+			if (((Song) songs.get(i)).getSongID() == songID) {
+				try {
+					playlist.addSong((Song) songs.get(i));
+					added = true;
+				} catch (ClassNotFoundException | SQLException | IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return added;
 	}
 
 }

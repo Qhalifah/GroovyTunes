@@ -2,6 +2,8 @@ package player;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,6 +15,8 @@ import org.json.simple.JSONObject;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+
+import utils.PlaylistOperations;
 
 public class Playlist implements Playable {
 
@@ -49,10 +53,11 @@ public class Playlist implements Playable {
 	@Override
 	public JSONObject play() {
 		JSONObject playlist = new JSONObject();
-		playlist.put("name", name);
+		JSONArray arr = new JSONArray();
 		for (Playable p : songs) {
-			playlist.put("song", p.play());
+			arr.add(p.play());
 		}
+		playlist.put("songs", arr);
 		return playlist;
 	}
 
@@ -60,6 +65,11 @@ public class Playlist implements Playable {
 		// this.songs.add(songID);
 		this.updatePlaylist();
 		return false;
+	}
+	
+	public boolean addSong(Song s) throws ClassNotFoundException, SQLException, IOException {
+		songs.add(s);
+		return PlaylistOperations.addSong(s.getSongID(), this.ID);
 	}
 	
 	public boolean removeSong(int songID) {

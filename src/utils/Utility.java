@@ -70,7 +70,7 @@ public class Utility {
 		Song song = Song.getSong(tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
 				tag.getFirst(FieldKey.ALBUM).replaceAll(",", ";"),
 				tag.getFirst(FieldKey.ALBUM_ARTIST).replaceAll(",", ";"),
-				tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"), a.getTrackLength(), file.getAbsolutePath());
+				tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"), a.getTrackLength(), file.getPath());
 		return song;
 	}
 

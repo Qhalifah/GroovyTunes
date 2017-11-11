@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +46,20 @@ public class PlaylistOperations {
 		return playlists;
 	}
 	
-	public static int createPlaylist(String user, String name, int id) throws ClassNotFoundException, SQLException, IOException {
+	public static int createPlaylist(String user, String name) throws ClassNotFoundException, SQLException, IOException {
 		int ID = -1;
-		String query = "INSERT INTO " + Constants.PLAYLIST_TABLE + "(playlist_ID, username, name) VALUES "
+		String query = "SELECT MAX(playlist_ID) FROM " + Constants.PLAYLIST_TABLE;
+		Statement stmt = GroovyConnection.getConnection().createStatement();
+		ResultSet set = stmt.executeQuery(query);
+		if(set.next()) {
+			ID = set.getInt(1);
+		} else {
+			ID = 1;
+		}
+		query = "INSERT INTO " + Constants.PLAYLIST_TABLE + "(playlist_ID, username, name) VALUES "
 				+ "(?,?,?)";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
-		statement.setInt(1, id);
+		statement.setInt(1, ID);
 		statement.setString(2, user);
 		statement.setString(3, name);
 		try {
@@ -59,5 +68,15 @@ public class PlaylistOperations {
 			ID = -1;
 		}
 		return ID;
+	}
+
+	public static boolean addSong(int songID, int id) throws ClassNotFoundException, SQLException, IOException {
+		boolean inserted = false;
+		String query = "INSERT INTO " + Constants.PLAYLIST_SONGS + "(playlist_ID, song_ID) VALUES "
+				+ "(?,?)";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		if(statement.executeUpdate() == 1)
+			inserted = true;
+		return inserted;
 	}
 }

@@ -6,10 +6,12 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import utils.Utility;
+import utils.GroovyConnection;
 
 public class WebSocket {
 
     public static void main(String[] args) throws Exception{
+
         if(args.length == 2) {
         	if(args[0].equals("add"))
         		Utility.updateSongDB(args[1], false);
@@ -17,6 +19,7 @@ public class WebSocket {
         		Utility.updateSongDB(args[1], true);
         	System.exit(0);
         }
+        GroovyConnection.getConnection();
 
         Server server = new Server(8080);
         ServletContextHandler ctx = new ServletContextHandler();

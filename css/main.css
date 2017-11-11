@@ -88,7 +88,8 @@ img.center {
 
 
 #songs{
-    height:80%;
+    bottom:0;
+    top:400px;
     overflow:auto;
 }
 

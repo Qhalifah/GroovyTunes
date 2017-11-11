@@ -39,6 +39,7 @@ body {
 .sign_in{
     position: absolute;
     background-color: #eee;
-    height: 100%;
+    bottom:0;
+    top:400px;
     width: 100%;
 }

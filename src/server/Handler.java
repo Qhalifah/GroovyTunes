@@ -22,6 +22,7 @@ import user.User;
 import utils.Constants;
 import utils.Reason;
 import utils.Utility;
+import utils.GroovyConnection;
 
 @WebSocket
 public class Handler {
@@ -49,11 +50,10 @@ public class Handler {
 		System.out.println("Connect: " + session.getRemoteAddress().getAddress());
 		this.session = new GroovySession(session);
 		userHelper = new UserRequestHelper(this.session);
-
 		// I am adding a user object in the session for now.
 		// After auth flow, this will be added later
-		AuthResult u = Authenticate.authUser("admin", "password");
-		this.session.add(Constants.USER_SESSION_KEY, u.getUser());
+		//AuthResult u = Authenticate.authUser("admin", "password");
+		//this.session.add(Constants.USER_SESSION_KEY, u.getUser());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,8 +68,11 @@ public class Handler {
 			String type = (String) msgJSON.get("type");
 			switch (type) {
 			case "get-playlists": // GET
+				JSONObject msg = new JSONObject();
+				msg.put("type", "ret-get-playlists");
 				JSONArray playlistsAsJSON = admin.getPlayer().getPlaylistsAsJSON();
-				session.getRemote().sendString(playlistsAsJSON.toJSONString());
+				msg.put("playlists", playlistsAsJSON);
+				session.getRemote().sendString(msg.toJSONString());
 				break;
 
 			case "create-playlist": // POST

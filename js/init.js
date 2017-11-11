@@ -5,8 +5,6 @@ var user = {};
 var playlists = {};
 var playlist = {};
 window.onload = function() {
-    if(onload == true){return}
-    var onload = true;
     var originalValue;
     $('#playlistTitle').on('dblclick', function(){
         originalValue = $(this).text();
@@ -58,16 +56,9 @@ window.onload = function() {
             break;
         case "retGetUser":
             break;
-        case "retGetPlaylists":
-            playlists = message.message;
+        case "ret-get-playlists":
+            playlists = message.playlists;
             dispPlaylists();
-            if(onload){
-            var p = _.find(playlists, function(playlist){
-                return playlist.playlistName == "All Songs";
-            });
-            dispPlaylist(p.playlistId);
-            onload = false;
-            }
             break;
         case "retDispPlaylist":
             playlist = message.message;
@@ -152,7 +143,7 @@ function capitalizeFirst(_str){
 function dispPlaylists(){
     var html = '';
     _.each(playlists, function(playlist){
-        html += '<li onclick="dispPlaylist(\'' + playlist.playlistId + '\')">' + (playlist.playlistName || 'New Playlist') + '</li>';
+        html += '<li onclick="dispPlaylist(\'' + playlist.name + '\')">' + (playlist.name || 'New Playlist') + '</li>';
     });
     $('#playlists').html(html);
 }

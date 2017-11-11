@@ -20,9 +20,9 @@ public class Song implements Playable {
 		this.duration = duration;
 		this.URL = URL;
 	}
-	
+
 	private Song() {}
-	
+
 	public static Song getSong(String title, String albumartist, String album, String genre, double duration, String URL) {
 		Song s = new Song();
 		s.title = title;

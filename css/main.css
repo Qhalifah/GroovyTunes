@@ -79,7 +79,7 @@ img.center {
 
 #main {
     position: absolute;
-    left:178px; top:170px; right:0; bottom:0;
+    left:178px; top:400px; right:0; bottom:0;
 }
 
 .hidden{
@@ -88,8 +88,6 @@ img.center {
 
 
 #songs{
-    bottom:0;
-    top:400px;
     overflow:auto;
 }
 

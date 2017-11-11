@@ -44,7 +44,7 @@ public abstract class Player {
 		JSONArray songsJSON = new JSONArray();
 		for (Playable p : songs) {
 			Song song = (Song) p;
-			songsJSON.add(song.getAsJSON());
+			songsJSON.add(song.getMetaData());
 		}
 		return songsJSON;
 	}
@@ -121,5 +121,25 @@ public abstract class Player {
 			}
 		}
 		return removed;
+	}
+
+	public Playlist getPlaylist(String name) {
+		for(int i = 0; i < playlists.size(); ++i) {
+			Playlist p = (Playlist) playlists.get(i);
+			if(p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public Song getSong(int id) {
+		for(int i = 0; i < songs.size(); ++i) {
+			Song p = (Song) songs.get(i);
+			if(p.getSongID() == id) {
+				return p;
+			}
+		}
+		return null;
 	}
 }

@@ -47,6 +47,11 @@ window.onload = function() {
                     'level':'playlist-level',
                 }
                 socket.send(JSON.stringify(msg));
+                msg = {
+                    'type':'get-all-songs',
+                    'level':'playlist-level'
+                }
+                socket.send(JSON.stringify(msg));
             }else{
                 alert(message.message);
             }
@@ -59,6 +64,12 @@ window.onload = function() {
         case "ret-get-playlists":
             playlists = message.playlists;
             dispPlaylists();
+            break;
+        case "get-all-songs":
+            _.each(message.songs, function(_song){
+                songs[_song.songID] = _song;
+            });
+            showAllSongs();
             break;
         case "retDispPlaylist":
             playlist = message.message;
@@ -87,7 +98,7 @@ function showPlaylist() {
         var toDisp = (_meta[_field] || '');
       html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
     });
-    if(_.size(playlists) > 1 && playlist.playlistName == "All Songs"){
+    if(_.size(playlists) > 1 && playlist.name == "All Songs"){
         html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
     }
     html += '<td onclick="removeSong(\'' + _meta.songId + '\')">-</td>';
@@ -95,7 +106,27 @@ function showPlaylist() {
   });
   html += '</table>';
   $('#songs').html(html);
-  $('#playlistTitle').html((playlist.playlistName != "null" ? playlist.playlistName : "New Playlist"));
+  $('#playlistTitle').html((playlist.name != "null" ? playlist.name : "New Playlist"));
+}
+
+function showAllSongs() {
+  var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
+  var html = '<table class="table table-hover"><tr>';
+  _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
+  html += '</tr>';
+  _.each(songs, function(_meta, _src) {
+    html += '<tr>';
+    _src = _src.replace(/\\/g,'\\\\');
+    _.each(fields, function(_field){
+        var toDisp = (_meta[_field] || '');
+      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
+    });
+    html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
+    html += '</tr>';
+  });
+  html += '</table>';
+  $('#songs').html(html);
+  $('#playlistTitle').html('All Songs');
 }
 
 function removeSong(_song){
@@ -148,10 +179,11 @@ function dispPlaylists(){
     $('#playlists').html(html);
 }
 
-function dispPlaylist(_id){
+function dispPlaylist(_name){
     var msg = {
-        type: 'dispPlaylist',
-        id: _id,
+        'type': 'get-songs',
+        'name': _name,
+        'level':'playlist-level',
     }
     socket.send(JSON.stringify(msg));
 }

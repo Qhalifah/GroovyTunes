@@ -156,19 +156,33 @@ public class Handler {
 				session.getRemote().sendString(response.toJSONString());
 
 			case "get-all-songs":
+				msg = new JSONObject();
+				msg.put("type", "get-all-songs");
 				JSONArray allSongsAsJSON = admin.getPlayer().getAllSongsAsJSON();
-				session.getRemote().sendString(allSongsAsJSON.toJSONString());
+				msg.put("songs", allSongsAsJSON);
+				session.getRemote().sendString(msg.toJSONString());
 				break;
 
 			case "get-songs":
 				name = (String) msgJSON.get("name");
 				JSONObject playlistAsJSON = admin.getPlayer().getSongsInPlaylistAsJSON(name);
+				playlistAsJSON.put("type", "ret-get-songs");
 				session.getRemote().sendString(playlistAsJSON.toJSONString());
 				break;
 
 			case "play":
 				// TODO: get the type and play it
 				System.out.println("TODO");
+				String typeOfPlayble = (String) msgJSON.get("type-of-playble");
+				if(typeOfPlayble.equals("playlist")) {
+					name = (String) msgJSON.get("name");
+					JSONObject obj = admin.getPlayer().getPlaylist(name).play();
+					session.getRemote().sendString(obj.toJSONString());
+				} else {
+					int id = Integer.parseInt((String) msgJSON.get("id"));
+					JSONObject obj = admin.getPlayer().getSong(id).play();
+					session.getRemote().sendString(obj.toJSONString());
+				}
 				break;
 
 			}

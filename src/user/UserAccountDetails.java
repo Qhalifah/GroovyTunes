@@ -1,5 +1,7 @@
 package user;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -78,8 +80,11 @@ public class UserAccountDetails {
 
 	/**
 	 * This method marks the user as PREMIUM user
+	 * @throws IOException 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void activatePremium() {
+	public void activatePremium() throws ClassNotFoundException, SQLException, IOException {
 		this.membershipStatus = true;
 		UserOperations.activatePremium(username);
 	}

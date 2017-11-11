@@ -12,9 +12,18 @@ import utils.Reason;
 public abstract class Player {
 	protected List<Playable> songs;
 	protected List<Playable> playlists;
+	protected String username;
 
 	public List<Playable> getAllSongs() {
 		return songs;
+	}
+	
+	public void populatePlaylists(List<Playable> playlists) {
+		this.playlists = playlists;
+	}
+	
+	public void populateSongs(List<Playable> songs) {
+		this.songs = songs;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,9 +48,9 @@ public abstract class Player {
 
 	public abstract void createPlaylist(String name) throws PlaylistNotCreatedException;
 
-	public abstract boolean addSongToPlaylist(String name, String ID) throws IllegalOperationException;
+	public abstract boolean addSongToPlaylist(String playlistName, int songID) throws IllegalOperationException;
 
-	public boolean removeSongFromPlaylist(String name, String ID) {
+	public boolean removeSongFromPlaylist(String name, int ID) {
 		boolean removed = false;
 		for (int i = 0; i < playlists.size(); ++i) {
 			Playlist p = (Playlist) playlists.get(i);

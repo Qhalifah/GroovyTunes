@@ -67,7 +67,7 @@ public class Utility {
 		AudioFile f = AudioFileIO.read(file);
 		Tag tag = f.getTag();
 		AudioHeader a = f.getAudioHeader();
-		Song song = new Song(tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
+		Song song = Song.getSong(tag.getFirst(FieldKey.TITLE).replaceAll(",", ";"),
 				tag.getFirst(FieldKey.ALBUM).replaceAll(",", ";"),
 				tag.getFirst(FieldKey.ALBUM_ARTIST).replaceAll(",", ";"),
 				tag.getFirst(FieldKey.GENRE).replaceAll(",", ";"), a.getTrackLength(), file.getAbsolutePath());

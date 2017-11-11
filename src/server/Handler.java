@@ -111,7 +111,7 @@ public class Handler {
 
 			case "add-song": // PUT
 				name = (String) msgJSON.get("name");
-				String ID = (String) msgJSON.get("id");
+				int ID = (int) msgJSON.get("id");
 				response = new JSONObject();
 				try {
 					if (admin.getPlayer().addSongToPlaylist(name, ID)) {
@@ -130,7 +130,7 @@ public class Handler {
 
 			case "remove-song": // PUT
 				name = (String) msgJSON.get("name");
-				ID = (String) msgJSON.get("id");
+				ID = (int) msgJSON.get("id");
 				response = new JSONObject();
 				if (admin.getPlayer().removeSongFromPlaylist(name, ID)) {
 					response.put("status", "success");

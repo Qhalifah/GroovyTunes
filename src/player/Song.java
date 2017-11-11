@@ -8,16 +8,30 @@ public class Song implements Playable {
 	private String album;
 	private String genre;
 	private double duration;
-	private String songID;
+	private int songID;
 	private String URL;
 
-	public Song(String title, String albumartist, String album, String genre, double duration, String URL) {
+	public Song(int ID, String title, String albumartist, String album, String genre, double duration, String URL) {
+		this.songID = ID;
 		this.title = title;
 		this.albumArtist = albumartist;
 		this.album = album;
 		this.genre = genre;
 		this.duration = duration;
 		this.URL = URL;
+	}
+	
+	private Song() {}
+	
+	public static Song getSong(String title, String albumartist, String album, String genre, double duration, String URL) {
+		Song s = new Song();
+		s.title = title;
+		s.albumArtist = albumartist;
+		s.album = album;
+		s.genre = genre;
+		s.duration = duration;
+		s.URL = URL;
+		return s;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,7 +84,7 @@ public class Song implements Playable {
 		return duration;
 	}
 
-	public String getSongID() {
+	public int getSongID() {
 		return songID;
 	}
 

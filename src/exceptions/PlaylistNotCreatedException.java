@@ -8,13 +8,24 @@ public class PlaylistNotCreatedException extends Exception {
 	
 	private Reason reason;
 	
+	private Exception baseException;
+	
 	public PlaylistNotCreatedException(Reason reason) {
 		this.reason = reason;
 	}
 	
+	public PlaylistNotCreatedException(Reason reason, Exception ex) {
+		this.reason = reason;
+		this.baseException = ex;
+	}
+	
 	public Reason getReason() {
 		return reason;
-	} 
+	}
+	
+	public Exception getBaseException() {
+		return baseException;
+	}
 }
 
 

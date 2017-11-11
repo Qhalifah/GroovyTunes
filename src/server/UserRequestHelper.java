@@ -64,12 +64,15 @@ public class UserRequestHelper {
 			password = (String) message.get("password");
 			AuthResult result = Authenticate.authUser(name, password);
 			if (result.getResult() == AUTH_RESULT.SUCCESS) {
+				response.put("type", "retLogin");
 				response.put("status", "success");
 				session.add(Constants.USER_SESSION_KEY, result.getUser());
 			} else if (result.getResult() == AUTH_RESULT.INCORRECT_PASSWORD) {
+				response.put("type", "retLogin");
 				response.put("status", "error");
 				response.put("message", "wrong password");
 			} else {
+				response.put("type", "retLogin");
 				response.put("status", "error");
 				response.put("message", "no such user");
 			}

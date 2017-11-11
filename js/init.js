@@ -5,7 +5,7 @@ var user = {};
 var playlists = {};
 var playlist = {};
 window.onload = function() {
-
+    if(onload == true){return}
     var onload = true;
     var originalValue;
     $('#playlistTitle').on('dblclick', function(){
@@ -36,24 +36,23 @@ window.onload = function() {
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
-
-    var msg = {
-        type: 'getMusic'
-    };
-    socket.send(JSON.stringify(msg));
-    msg = {
-        type: 'getUser'
-    };
-    socket.send(JSON.stringify(msg));
-    msg = {
-        type: 'getPlaylists'
-    };
-    socket.send(JSON.stringify(msg));
   }
   socket.onmessage = function(e) {
     var message = JSON.parse(e.data);
     console.log(message);
     switch(message.type){
+        case "retLogin":
+            if(message.status == 'success'){
+                $('.sign_in').addClass('hidden');
+                var msg = {
+                    'type':'get-playlists',
+                    'level':'playlist-level',
+                }
+                socket.send(JSON.stringify(msg));
+            }else{
+                alert(message.message);
+            }
+            break;
         case "retGetMusic":
             songs = message.message;
             break;
@@ -170,4 +169,25 @@ function dispPlaylist(_id){
 function dispPlayer(_src){
   html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="\.' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
+}
+
+function sign_in(){
+
+}
+
+function sign_up(){
+
+}
+
+
+function login(){
+    var username = $('#inputUsername').val();
+    var pass = $('#inputPassword').val();
+    var msg = {
+        'type': 'login',
+        'level': 'user',
+        'username': username,
+        'password':pass,
+    }
+    socket.send(JSON.stringify(msg));
 }

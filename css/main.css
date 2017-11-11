@@ -16,6 +16,11 @@
   background-color: #333;
 }
 
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+
 #navBar li {
   float: left;
 }
@@ -33,7 +38,7 @@
 }
 
 #sideBar{
-    left:0; top:170px; bottom: 0;
+    left:0; top:400px; bottom: 0;
     width: 178px;
     background-color: #333;
     position:absolute;
@@ -77,6 +82,9 @@
     left:178px; top:170px; right:0; bottom:0;
 }
 
+.hidden{
+    visibility:hidden;
+}
 
 
 #songs{

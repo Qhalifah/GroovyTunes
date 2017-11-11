@@ -1,6 +1,4 @@
 body {
-  padding-top: 40px;
-  padding-bottom: 40px;
   background-color: #eee;
 }
 
@@ -36,4 +34,11 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.sign_in{
+    position: absolute;
+    background-color: #eee;
+    height: 100%;
+    width: 100%;
 }

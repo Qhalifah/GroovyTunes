@@ -79,4 +79,35 @@ public class PlaylistOperations {
 			inserted = true;
 		return inserted;
 	}
+
+	public static void renamePlaylist(int ID, String newName) throws ClassNotFoundException, SQLException, IOException {
+		String query = "UPDATE " + Constants.PLAYLIST_TABLE + " SET name = ? WHERE playlist_ID = ?";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setString(1, newName);
+		statement.setInt(1, ID);
+		statement.executeUpdate();
+	}
+
+	public static void removeSong(int playlistID, int songID) throws ClassNotFoundException, SQLException, IOException {
+		String query = "DELETE FROM " + Constants.PLAYLIST_SONGS + " WHERE song_ID = ? AND playlist_ID = ?";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, songID);
+		statement.setInt(2, playlistID);
+		statement.executeUpdate();
+	}
+
+	public static void removePlaylist(int playlistID, String username) throws ClassNotFoundException, SQLException, IOException {
+		// Remove a playlist from user's accoutn
+		String query = "DELETE FROM " + Constants.PLAYLIST_TABLE + " WHERE playlist_ID = ? AND username = ?";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, playlistID);
+		statement.setString(2, username);
+		statement.executeUpdate();
+		// Remove all songs in the playlist
+		query = "DELETE FROM " + Constants.PLAYLIST_SONGS + " WHERE playlist_ID = ?";
+		statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, playlistID);
+		statement.executeUpdate();
+	}
 }
+

@@ -254,4 +254,8 @@ public class Playlist implements Playable {
 		obj.put("songs", allSongsAsJSON);
 		return obj;
 	}
+	
+	public int getID() {
+		return this.ID;
+	}
 }

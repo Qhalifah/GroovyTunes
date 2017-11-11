@@ -5,8 +5,6 @@ var user = {};
 var playlists = {};
 var playlist = {};
 window.onload = function() {
-
-    var onload = true;
     var originalValue;
     $('#playlistTitle').on('dblclick', function(){
         originalValue = $(this).text();
@@ -36,39 +34,42 @@ window.onload = function() {
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
-
-    var msg = {
-        type: 'getMusic'
-    };
-    socket.send(JSON.stringify(msg));
-    msg = {
-        type: 'getUser'
-    };
-    socket.send(JSON.stringify(msg));
-    msg = {
-        type: 'getPlaylists'
-    };
-    socket.send(JSON.stringify(msg));
   }
   socket.onmessage = function(e) {
     var message = JSON.parse(e.data);
     console.log(message);
     switch(message.type){
+        case "retLogin":
+            if(message.status == 'success'){
+                $('.sign_in').addClass('hidden');
+                var msg = {
+                    'type':'get-playlists',
+                    'level':'playlist-level',
+                }
+                socket.send(JSON.stringify(msg));
+                msg = {
+                    'type':'get-all-songs',
+                    'level':'playlist-level'
+                }
+                socket.send(JSON.stringify(msg));
+            }else{
+                alert(message.message);
+            }
+            break;
         case "retGetMusic":
             songs = message.message;
             break;
         case "retGetUser":
             break;
-        case "retGetPlaylists":
-            playlists = message.message;
+        case "ret-get-playlists":
+            playlists = message.playlists;
             dispPlaylists();
-            if(onload){
-            var p = _.find(playlists, function(playlist){
-                return playlist.playlistName == "All Songs";
+            break;
+        case "get-all-songs":
+            _.each(message.songs, function(_song){
+                songs[_song.songID] = _song;
             });
-            dispPlaylist(p.playlistId);
-            onload = false;
-            }
+            showAllSongs();
             break;
         case "retDispPlaylist":
             playlist = message.message;
@@ -97,7 +98,7 @@ function showPlaylist() {
         var toDisp = (_meta[_field] || '');
       html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
     });
-    if(_.size(playlists) > 1 && playlist.playlistName == "All Songs"){
+    if(_.size(playlists) > 1 && playlist.name == "All Songs"){
         html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
     }
     html += '<td onclick="removeSong(\'' + _meta.songId + '\')">-</td>';
@@ -105,7 +106,27 @@ function showPlaylist() {
   });
   html += '</table>';
   $('#songs').html(html);
-  $('#playlistTitle').html((playlist.playlistName != "null" ? playlist.playlistName : "New Playlist"));
+  $('#playlistTitle').html((playlist.name != "null" ? playlist.name : "New Playlist"));
+}
+
+function showAllSongs() {
+  var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
+  var html = '<table class="table table-hover"><tr>';
+  _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
+  html += '</tr>';
+  _.each(songs, function(_meta, _src) {
+    html += '<tr>';
+    _src = _src.replace(/\\/g,'\\\\');
+    _.each(fields, function(_field){
+        var toDisp = (_meta[_field] || '');
+      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
+    });
+    html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
+    html += '</tr>';
+  });
+  html += '</table>';
+  $('#songs').html(html);
+  $('#playlistTitle').html('All Songs');
 }
 
 function removeSong(_song){
@@ -153,15 +174,16 @@ function capitalizeFirst(_str){
 function dispPlaylists(){
     var html = '';
     _.each(playlists, function(playlist){
-        html += '<li onclick="dispPlaylist(\'' + playlist.playlistId + '\')">' + (playlist.playlistName || 'New Playlist') + '</li>';
+        html += '<li onclick="dispPlaylist(\'' + playlist.name + '\')">' + (playlist.name || 'New Playlist') + '</li>';
     });
     $('#playlists').html(html);
 }
 
-function dispPlaylist(_id){
+function dispPlaylist(_name){
     var msg = {
-        type: 'dispPlaylist',
-        id: _id,
+        'type': 'get-songs',
+        'name': _name,
+        'level':'playlist-level',
     }
     socket.send(JSON.stringify(msg));
 }
@@ -170,4 +192,25 @@ function dispPlaylist(_id){
 function dispPlayer(_src){
   html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="\.' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
+}
+
+function sign_in(){
+
+}
+
+function sign_up(){
+
+}
+
+
+function login(){
+    var username = $('#inputUsername').val();
+    var pass = $('#inputPassword').val();
+    var msg = {
+        'type': 'login',
+        'level': 'user',
+        'username': username,
+        'password':pass,
+    }
+    socket.send(JSON.stringify(msg));
 }

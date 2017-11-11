@@ -1,87 +1,90 @@
 package user;
 
-import org.json.simple.*;
-import java.util.*;
-import com.opencsv.*;
-import java.util.stream.Collectors;
-import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import player.Playlist;
-import player.Song;
-import server.Utility;
+import org.json.simple.JSONObject;
 
+import player.Player;
+import player.PlayerFactory;
+import utils.Constants;
+
+/**
+ * This class contains a list of playlist available to a user. It also maps to UserAccountDetails.
+ */
 public class User {
-	private String username;
-	private String password;
-	private static final String USERS_DATABASE = "./databases/users.csv";
-	private ArrayList<Playlist> playlists = new ArrayList<Playlist>();
-	private UserAccountDetails userDetails;
-	Utility u = new Utility();
+	private Player player;
+	private UserAccountDetails details;
 
-	public User(String username, String password, String firstName, String lastName, Date dob, Date dateJoined){
-		this.username = username;
-		this.password = password;
-		this.userDetails = new UserAccountDetails(firstName, lastName, dob, dateJoined);
-
-		Playlist playlist = new Playlist();
-
-		playlist.setName("All Songs");
-		try{
-			ArrayList<Song> songs = u.getAllSongs();
-			for(Song s : songs){
-				playlist.addSong(s.songId);
-			}
-		}catch(Exception e){
-
+	/**
+	 * Created one instance of User using given values.
+	 * This instance is created from Authenticate class after letting the user log in
+	 */
+	public User(String username, String password, String firstName, String lastName,
+		Date dob, Date dateJoined, boolean membershipStatus) {
+		this.details = new UserAccountDetails(username, password, firstName, lastName,
+			dob, dateJoined, membershipStatus);
+		player = null;
+	}
+	
+	public Player getPlayer() {
+		if(player == null) {
+			player = PlayerFactory.getPlayer(this);
 		}
-		playlists.add(playlist);
-
+		return player;
+	}
+	/**
+	 * Returns user account details
+	 * @return account details in JSON form
+	 */
+	public JSONObject getUserInfo() {
+		return this.details.getUserDetails();
 	}
 
-
-	public void createPlaylist(){
-		Playlist playlist = new Playlist();
-		playlists.add(playlist);
+	/**
+	 * Updates the user details.
+	 * @return true if the details are updated, false otherwise
+	 * @throws ParseException 
+	 */
+	public boolean updateUserInfo(String username, String firstName, String lastName, 
+		String dateOfBirth, String dateJoined) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
+		Date dob = sdf.parse(dateOfBirth);
+		Date doj = sdf.parse(dateJoined);
+		return details.updateDetails(username, firstName, lastName, dob, doj);
 	}
 
-	public void deletePlaylist(String playlistId){
-		playlists.removeIf((Playlist playlist) -> playlist.playlistId.equals(playlistId));
-		Playlist.removePlaylist(playlistId);
+	public boolean isPremiumUser() {
+		return details.isPremiumMember();
 	}
-
-	public JSONArray getPlaylists(){
-		JSONArray playlistsIds = new JSONArray();
-		for(Playlist p : playlists){
-			JSONObject playlist = new JSONObject();
-			p = new Playlist(p.playlistId);
-			playlist.put("playlistId", p.playlistId);
-			playlist.put("playlistName", p.getName());
-			playlistsIds.add(playlist);
-		}
-		return playlistsIds;
+	
+	public String getUsername() {
+		return details.getUsername();
 	}
-
-	public JSONObject getUserInfo(){
-		return this.userDetails.getUserDetails();
+	public String getPassword() {
+		return details.getPassword();
 	}
-
-	public static void updateUserInfo(String username, String firstName, String lastName, Date dob, Date dateJoined) throws IOException{
-		removeUser(username);
-
-		try{
-			boolean status = false;
-			CSVWriter writer = new CSVWriter(new FileWriter(USERS_DATABASE, true)); // true flag for appending to end of file
-			String[] record = ("Id," + username + ",fname," + firstName + ",lname," + lastName + ",dob," + dob + ",datejoin," + dateJoined + ",membershipStatus," + status ).split(",");
-			writer.writeNext(record);
-			writer.flush();
-			writer.close();
-		}
-
-		catch(Exception e){
-			e.printStackTrace();
-		}
+	public String getFirstName() {
+		return details.getFirstName();
 	}
-
+	public String getLastName() {
+		return details.getLastName();
+	}
+	public String getDateOfBirth() {
+		return details.getDateOfBirth();
+	}
+	public String getDateJoined() {
+		return details.getDateJoined();
+	}
+	public String getMembershipStatus() {
+		return details.getMembershipStatus();
+	}
+	
+	/**
+	 * commenting out this method. Do we need to provide this functionality as well?
+	 */
+	/*
 	public static void removeUser(String username){
 		try{
 
@@ -107,5 +110,6 @@ public class User {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 }

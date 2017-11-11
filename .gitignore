@@ -1,10 +1,20 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+
 # JAR build
 build/
+
 # class files
 bin/
 *.class
+
+# configuration files
+conf/pwd
+
+# Eclipse files
+.project
+.settings/
+.classpath
 
 recompile.bat
 run_server.bat

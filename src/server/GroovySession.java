@@ -1,9 +1,10 @@
 package server;
 
-import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.RemoteEndpoint;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.jetty.websocket.api.RemoteEndpoint;
+import org.eclipse.jetty.websocket.api.Session;
 
 public class GroovySession {
 
@@ -44,5 +45,9 @@ public class GroovySession {
 
     public RemoteEndpoint getRemote() {
         return session.getRemote();
+    }
+    
+    public void invalidate() {
+    	session.close();
     }
 }

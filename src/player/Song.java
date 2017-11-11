@@ -1,67 +1,94 @@
 package player;
 
-import org.json.simple.*;
-import java.util.*;
-import com.opencsv.*;
-import java.util.stream.Collectors;
-import java.io.*;
+import org.json.simple.JSONObject;
 
-public class Song{
-	public String title;
-	public String albumartist;
-	public String album;
-	public String genre;
-	public double duration;
-	public String songId;
-	private static final String SONGS_DATABASE = "./databases/songs.csv";
+public class Song implements Playable {
+	private String title;
+	private String albumArtist;
+	private String album;
+	private String genre;
+	private double duration;
+	private int songID;
+	private String URL;
 
-	public Song(String title, String albumartist, String album, String genre, double duration){
+	public Song(int ID, String title, String albumartist, String album, String genre, double duration, String URL) {
+		this.songID = ID;
 		this.title = title;
-		this.albumartist = albumartist;
+		this.albumArtist = albumartist;
 		this.album = album;
 		this.genre = genre;
 		this.duration = duration;
-		this.songId = UUID.randomUUID().toString();
+		this.URL = URL;
 	}
 
-	public Song(String title, String albumartist, String album, String genre, double duration, String songId){
-		this.title = title;
-		this.albumartist = albumartist;
-		this.album = album;
-		this.genre = genre;
-		this.duration = duration;
-		this.songId = songId;
+	private Song() {}
+
+	public static Song getSong(String title, String albumartist, String album, String genre, double duration, String URL) {
+		Song s = new Song();
+		s.title = title;
+		s.albumArtist = albumartist;
+		s.album = album;
+		s.genre = genre;
+		s.duration = duration;
+		s.URL = URL;
+		return s;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject play() {
+		JSONObject song = new JSONObject();
+		song.put("id", songID);
+		song.put("url", URL);
+		return song;
+	}
 
-	public JSONObject getMetaData(){
+	@SuppressWarnings("unchecked")
+	public JSONObject getMetaData() {
 		JSONObject obj = new JSONObject();
 		obj.put("title", this.title);
-		obj.put("albumartist", this.albumartist);
+		obj.put("albumArtist", this.albumArtist);
 		obj.put("album", this.album);
 		obj.put("genre", this.genre);
 		obj.put("duration", this.duration);
-		obj.put("songId", this.songId);
+		obj.put("songID", this.songID);
 		return obj;
 	}
 
-
-	public void addToDb(String path) throws Exception{
-		CSVWriter writer = new CSVWriter(new FileWriter(SONGS_DATABASE, true));
-		String[] record = (
-			"songId," + songId +
-			",title," + title +
-			",albumartist," + albumartist +
-			",album," + album +
-			",genre," + genre +
-			",duration," + duration +
-			",path," + path.replace("\\", "\\\\")
-		).split(",");
-		writer.writeNext(record);
-		writer.flush();
-		writer.close();
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject getAsJSON() {
+		JSONObject songJSON = new JSONObject();
+		songJSON.put("id", songID);
+		songJSON.put("title", title);
+		return songJSON;
 	}
 
+	public String getTitle() {
+		return title;
+	}
 
+	public String getAlbumArtist() {
+		return albumArtist;
+	}
 
+	public String getAlbum() {
+		return album;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public double getDuration() {
+		return duration;
+	}
+
+	public int getSongID() {
+		return songID;
+	}
+
+	public String getURL() {
+		return URL;
+	}
 }

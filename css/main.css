@@ -89,6 +89,7 @@ img.center {
 
 #songs{
     overflow:auto;
+    height:75%;
 }
 
 #player{

@@ -135,7 +135,25 @@ public abstract class Player {
 		return "share=" + playlist.getID();
 	}
 	
-	public abstract boolean addSharedPlaylist(int id);
+	public boolean addSharedPlaylist(int id) {
+		try {
+			String name = PlaylistOperations.getPlaylistNameByID(id);
+			this.createPlaylist(name);
+			Playlist playlist = this.getPlaylist(name);
+			List<Playable> newSongs = null;
+			newSongs = PlaylistOperations.getAllSongsByID(id);
+			for (int i = 0; i < newSongs.size(); ++i) {
+				playlist.addSong((Song) newSongs.get(i));
+			}
+			return true;
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (PlaylistNotCreatedException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public Playlist getPlaylist(String name) {
 		for(int i = 0; i < playlists.size(); ++i) {

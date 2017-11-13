@@ -2,7 +2,6 @@ package player;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
@@ -50,27 +49,6 @@ public class PremiumPlayer extends Player {
 			}
 		}
 		return added;
-	}
-
-	@Override
-	public boolean addSharedPlaylist(int id) {
-		try {
-			String name = PlaylistOperations.getPlaylistNameByID(id);
-			this.createPlaylist(name);
-			Playlist playlist = this.getPlaylist(name);
-			List<Playable> newSongs = null;
-			newSongs = PlaylistOperations.getAllSongsByID(id);
-			for (int i = 0; i < newSongs.size(); ++i) {
-				playlist.addSong((Song) newSongs.get(i));
-			}
-			return true;
-		} catch (ClassNotFoundException | SQLException | IOException e) {
-			e.printStackTrace();
-			return false;
-		} catch (PlaylistNotCreatedException e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 }

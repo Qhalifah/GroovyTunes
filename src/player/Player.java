@@ -122,6 +122,20 @@ public abstract class Player {
 		}
 		return removed;
 	}
+	
+	public String getSharableLink(String name) {
+		Playlist playlist = null;
+		for(int i = 0; i < playlists.size(); ++i) {
+			Playlist p = (Playlist) playlists.get(i);
+			if(p.getName().equals(name)) {
+				playlist = p;
+				break;
+			}
+		}
+		return "share=" + playlist.getID();
+	}
+	
+	public abstract boolean addSharedPlaylist(int id);
 
 	public Playlist getPlaylist(String name) {
 		for(int i = 0; i < playlists.size(); ++i) {

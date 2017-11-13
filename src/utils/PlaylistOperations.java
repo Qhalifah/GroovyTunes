@@ -109,5 +109,37 @@ public class PlaylistOperations {
 		statement.setInt(1, playlistID);
 		statement.executeUpdate();
 	}
+
+	public static String getPlaylistNameByID(int id) throws ClassNotFoundException, SQLException, IOException {
+		String name = null;
+		String query = "SELECT name FROM " + Constants.PLAYLIST_TABLE + " WHERE playlist_ID = ?";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, id);
+		ResultSet resultSet = statement.executeQuery();
+		if(resultSet.next()) {
+			name = resultSet.getString("name");
+		}
+		return name;
+	}
+	
+	public static List<Playable> getAllSongsByID(int id) throws ClassNotFoundException, SQLException, IOException {
+		String query = "SELECT * FROM " + Constants.SONG_TABLE + " WHERE ID IN (SELECT song_ID FROM " + Constants.PLAYLIST_SONGS + " WHERE playlist_ID = ?)";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, id);
+		ResultSet resultSet = statement.executeQuery();
+		List<Playable> songs = new ArrayList<>();
+		while(resultSet.next()) {
+			Song s = new Song(resultSet.getInt("ID"),
+					resultSet.getString("title"),
+					resultSet.getString("artist"),
+					resultSet.getString("album"),
+					resultSet.getString("genre"),
+					resultSet.getDouble("duration"),
+					resultSet.getString("url"));
+			songs.add(s);
+		}
+		return songs;
+	}
 }
+
 

@@ -80,6 +80,10 @@ public class User {
 	public String getMembershipStatus() {
 		return details.getMembershipStatus();
 	}
+
+	public boolean verifyPassword(String password) {
+		return this.getPassword().equals(password);
+	}
 	
 	/**
 	 * commenting out this method. Do we need to provide this functionality as well?

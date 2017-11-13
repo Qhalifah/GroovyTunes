@@ -25,7 +25,7 @@ public class Authenticate {
         u = UserOperations.findUser(username);
         if(u == null)
         	return new AuthResult(AUTH_RESULT.NO_SUCH_USER, null);
-        if(!u.getPassword().equals(password))
+        if(!u.verifyPassword(password))
         	return new AuthResult(AUTH_RESULT.INCORRECT_PASSWORD, null);
         return new AuthResult(AUTH_RESULT.SUCCESS, u);
     }

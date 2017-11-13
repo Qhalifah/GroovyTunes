@@ -14,15 +14,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import auth.Authenticate;
-import auth.Authenticate.AuthResult;
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
 import user.User;
 import utils.Constants;
 import utils.Reason;
 import utils.Utility;
-import utils.GroovyConnection;
 
 @WebSocket
 public class Handler {
@@ -154,6 +151,7 @@ public class Handler {
 					response.put("message", "Unable to remove playlist \'" + name + "\'");
 				}
 				session.getRemote().sendString(response.toJSONString());
+				break;
 
 			case "get-all-songs":
 				msg = new JSONObject();
@@ -171,8 +169,6 @@ public class Handler {
 				break;
 
 			case "play":
-				// TODO: get the type and play it
-				System.out.println("TODO");
 				String typeOfPlayble = (String) msgJSON.get("type-of-playble");
 				if(typeOfPlayble.equals("playlist")) {
 					name = (String) msgJSON.get("name");
@@ -184,7 +180,26 @@ public class Handler {
 					session.getRemote().sendString(obj.toJSONString());
 				}
 				break;
-
+				
+			case "get-sharable-link":
+				name = (String) msgJSON.get("name");
+				response = new JSONObject();
+				String sharableLink = admin.getPlayer().getSharableLink(name);
+				response.put("link", sharableLink);
+				session.getRemote().sendString(response.toJSONString());
+				break;
+				
+			case "add-shared-playlist":
+				int id = (int) msgJSON.get("id");
+				response = new JSONObject();
+				if(admin.getPlayer().addSharedPlaylist(id)) {
+					response.put("status", "success");
+				} else {
+					response.put("status", "error");
+					response.put("message", "unable to add playlist");
+				}
+				session.getRemote().sendString(response.toJSONString());
+				break;
 			}
 		} else {
 			userHelper.onMessage(msgJSON);

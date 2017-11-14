@@ -11,11 +11,10 @@ import utils.Constants;
 import utils.UserOperations;
 
 /**
- * This class stored all details related to the user.
- * It includes username, password, firstname, lastname, date of birth (dateOfBirth), date on which user
- * joined (dateJoined).
- * It also tracks if the user is PREMIUM user or REGULAR user
- * It has 1:1 relationship with User class
+ * This class stored all details related to the user. It includes username,
+ * password, firstname, lastname, date of birth (dateOfBirth), date on which
+ * user joined (dateJoined). It also tracks if the user is PREMIUM user or
+ * REGULAR user It has 1:1 relationship with User class
  */
 public class UserAccountDetails {
 	private String username;
@@ -28,17 +27,24 @@ public class UserAccountDetails {
 
 	/**
 	 * Creates an object of UserAccountDetails and assigns the given parameters
-	 * @param username: username
-	 * @param password: password
-	 * @param firstName: first name of user
-	 * @param lastName: last name of user
-	 * @param dateOfBirth: Date of birth
-	 * @param dateJoined: Date on which user joined GroovyTunes
+	 * 
+	 * @param username:
+	 *            username
+	 * @param password:
+	 *            password
+	 * @param firstName:
+	 *            first name of user
+	 * @param lastName:
+	 *            last name of user
+	 * @param dateOfBirth:
+	 *            Date of birth
+	 * @param dateJoined:
+	 *            Date on which user joined GroovyTunes
 	 */
-	public UserAccountDetails(String username, String password, String firstName, String lastName,
-		Date dob, Date dateJoined, boolean membershipStatus) {
- 		this.username = username;
- 		this.password = password;
+	UserAccountDetails(String username, String password, String firstName, String lastName, Date dob, Date dateJoined,
+			boolean membershipStatus) {
+		this.username = username;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dob;
@@ -47,12 +53,13 @@ public class UserAccountDetails {
 	}
 
 	/**
-	 * Returns details of the user in the form of JSON.
-	 * Details does not include username and password
+	 * Returns details of the user in the form of JSON. Details does not include
+	 * username and password
+	 * 
 	 * @return Details of the user in JSON format
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONObject getUserDetails() {
+	JSONObject getUserDetails() {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 		JSONObject userDetails = new JSONObject();
 		userDetails.put("firstName", this.firstName);
@@ -65,60 +72,69 @@ public class UserAccountDetails {
 
 	/**
 	 * This method updates the details stored in the database.
-	 * @param username: username. Also used as key
-	 * @param firstName: new value of first name. If unchanged, send the previous value
-	 * @param lastName: new value of last name. If unchanged, send the previous value
-	 * @param dateOfBirth: new value of date of birth. If unchanged, send the previous value
-	 * @param dateJoined. send the previous value. It makes no sense to change this
-	 * @return true if record is found in database, otherwise false.
-	 * If record is found, it is changed for sure
+	 * 
+	 * @param username:
+	 *            username. Also used as key
+	 * @param firstName:
+	 *            new value of first name. If unchanged, send the previous value
+	 * @param lastName:
+	 *            new value of last name. If unchanged, send the previous value
+	 * @param dateOfBirth:
+	 *            new value of date of birth. If unchanged, send the previous
+	 *            value
+	 * @param dateJoined.
+	 *            send the previous value. It makes no sense to change this
+	 * @return true if record is found in database, otherwise false. If record
+	 *         is found, it is changed for sure
 	 */
-	public boolean updateDetails(String username, String firstName, String lastName,
-		Date dob, Date dateJoined) {
+	boolean updateDetails(String username, String firstName, String lastName, Date dob) {
 		return false;
 	}
 
 	/**
 	 * This method marks the user as PREMIUM user
-	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
+	 * 
+	 * @throws IOException
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
 	 */
-	public void activatePremium() throws ClassNotFoundException, SQLException, IOException {
+	void activatePremium() throws ClassNotFoundException, SQLException, IOException {
 		this.membershipStatus = true;
 		UserOperations.activatePremium(username);
 	}
 
 	/**
 	 * This method checks if the user is a PREMIUM user
+	 * 
 	 * @return true if PREMIUM user, false otherwise
 	 */
-	public boolean isPremiumMember() {
+	boolean isPremiumMember() {
 		return this.membershipStatus;
 	}
 
-	
-	public String getUsername() {
+	String getUsername() {
 		return username;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public String getFirstName() {
+
+	String getFirstName() {
 		return firstName;
 	}
-	public String getLastName() {
+
+	String getLastName() {
 		return lastName;
 	}
-	public String getDateOfBirth() {
+
+	String getDateOfBirth() {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 		return sdf.format(dateOfBirth);
 	}
-	public String getDateJoined() {
+
+	String getDateJoined() {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 		return sdf.format(dateJoined);
 	}
-	public String getMembershipStatus() {
-		return membershipStatus ? "PREMIUM": "REGULAR";
+
+	String getMembershipStatus() {
+		return membershipStatus ? "PREMIUM" : "REGULAR";
 	}
 }

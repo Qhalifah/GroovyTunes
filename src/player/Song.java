@@ -21,17 +21,17 @@ public class Song implements Playable {
 		this.URL = URL;
 	}
 
-	private Song() {}
+	public Song(int ID) {
+		this.songID = ID;
+	}
 
-	public static Song getSong(String title, String albumartist, String album, String genre, double duration, String URL) {
-		Song s = new Song();
-		s.title = title;
-		s.albumArtist = albumartist;
-		s.album = album;
-		s.genre = genre;
-		s.duration = duration;
-		s.URL = URL;
-		return s;
+	public Song(String title, String albumartist, String album, String genre, double duration, String URL) {
+		this.title = title;
+		this.albumArtist = albumartist;
+		this.album = album;
+		this.genre = genre;
+		this.duration = duration;
+		this.URL = URL;
 	}
 
 	@SuppressWarnings("unchecked")

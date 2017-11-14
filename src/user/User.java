@@ -1,5 +1,7 @@
 package user;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,22 +50,27 @@ public class User {
 	 * @throws ParseException 
 	 */
 	public boolean updateUserInfo(String username, String firstName, String lastName, 
-		String dateOfBirth, String dateJoined) throws ParseException {
+		String dateOfBirth) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 		Date dob = sdf.parse(dateOfBirth);
-		Date doj = sdf.parse(dateJoined);
-		return details.updateDetails(username, firstName, lastName, dob, doj);
+		return details.updateDetails(username, firstName, lastName, dob);
 	}
 
 	public boolean isPremiumUser() {
 		return details.isPremiumMember();
 	}
 	
+	public void activatePremium() {
+		try {
+			details.activatePremium();
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public String getUsername() {
 		return details.getUsername();
-	}
-	public String getPassword() {
-		return details.getPassword();
 	}
 	public String getFirstName() {
 		return details.getFirstName();
@@ -82,38 +89,7 @@ public class User {
 	}
 
 	public boolean verifyPassword(String password) {
-		return this.getPassword().equals(password);
+		return details.getPassword().equals(password);
 	}
-	
-	/**
-	 * commenting out this method. Do we need to provide this functionality as well?
-	 */
-	/*
-	public static void removeUser(String username){
-		try{
-
-			CSVReader reader = new CSVReader(new FileReader(USERS_DATABASE), ',', '"', 0);
-			List<String[]> allRows = reader.readAll();
-
-				// Iterator created for List of records
-				// For each String[] record, if 0th element (username) is the one to be deleted, it is removed from List
-			for (Iterator<String[]> iterator = allRows.listIterator(); iterator.hasNext(); ){
-				String[] record = iterator.next();
-				if (record[1].equals(username)) {
-					iterator.remove();
-				}
-			}
-
-			CSVWriter writer = new CSVWriter(new FileWriter(USERS_DATABASE));
-			writer.writeAll(allRows);
-			writer.flush();
-            writer.close();
-		}
-
-		catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	*/
 
 }

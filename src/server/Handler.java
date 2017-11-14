@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
+import player.Song;
 import user.User;
 import utils.Constants;
 import utils.Reason;
@@ -114,7 +115,8 @@ public class Handler {
 				int ID = (int) msgJSON.get("id");
 				response = new JSONObject();
 				try {
-					if (admin.getPlayer().addSongToPlaylist(name, ID)) {
+					Song song = new Song(ID);
+					if (admin.getPlayer().addSongToPlaylist(name, song)) {
 						response.put("status", "success");
 					} else {
 						response.put("status", "error");
@@ -132,7 +134,8 @@ public class Handler {
 				name = (String) msgJSON.get("name");
 				ID = (int) msgJSON.get("id");
 				response = new JSONObject();
-				if (admin.getPlayer().removeSongFromPlaylist(name, ID)) {
+				Song song = new Song(ID);
+				if (admin.getPlayer().removeSongFromPlaylist(name, song)) {
 					response.put("status", "success");
 				} else {
 					response.put("status", "error");
@@ -176,7 +179,7 @@ public class Handler {
 					session.getRemote().sendString(obj.toJSONString());
 				} else {
 					int id = Integer.parseInt((String) msgJSON.get("id"));
-					JSONObject obj = admin.getPlayer().getSong(id).play();
+					JSONObject obj = admin.getPlayer().getSong(new Song(id)).play();
 					session.getRemote().sendString(obj.toJSONString());
 				}
 				break;
@@ -190,9 +193,9 @@ public class Handler {
 				break;
 				
 			case "add-shared-playlist":
-				int id = (int) msgJSON.get("id");
+				String shareID = (String) msgJSON.get("id");
 				response = new JSONObject();
-				if(admin.getPlayer().addSharedPlaylist(id)) {
+				if(admin.getPlayer().addSharedPlaylist(shareID)) {
 					response.put("status", "success");
 				} else {
 					response.put("status", "error");

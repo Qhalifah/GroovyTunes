@@ -51,16 +51,16 @@ public abstract class Player {
 
 	public abstract void createPlaylist(String name) throws PlaylistNotCreatedException;
 
-	public abstract boolean addSongToPlaylist(String playlistName, int songID) throws IllegalOperationException;
+	public abstract boolean addSongToPlaylist(String playlistName, Song songID) throws IllegalOperationException;
 
-	public boolean removeSongFromPlaylist(String name, int ID) {
+	public boolean removeSongFromPlaylist(String name, Song song) {
 		boolean removed = false;
 		for (int i = 0; i < playlists.size(); ++i) {
 			Playlist p = (Playlist) playlists.get(i);
 			if (p.getName().equals(name)) {
 				try {
-					PlaylistOperations.removeSong(p.getID(), ID);
-					removed = p.removeSong(ID);
+					PlaylistOperations.removeSong(p.getID(), song.getSongID());
+					removed = p.removeSong(song);
 				} catch (ClassNotFoundException | SQLException | IOException e) {
 					e.printStackTrace();
 				}
@@ -80,7 +80,7 @@ public abstract class Player {
 		for (int i = 0; i < playlists.size(); ++i) {
 			Playlist playlist = (Playlist) playlists.get(i);
 			if (playlist.getName().equals(name)) {
-				playlist.rename(newName);
+				playlist.setName(newName);
 				renamed = true;
 				try {
 					PlaylistOperations.renamePlaylist(playlist.getID(), newName);
@@ -132,11 +132,12 @@ public abstract class Player {
 				break;
 			}
 		}
-		return "share=" + playlist.getID();
+		return playlist.getID() + "";
 	}
 	
-	public boolean addSharedPlaylist(int id) {
+	public boolean addSharedPlaylist(String shareID) {
 		try {
+			int id = Integer.parseInt(shareID);
 			String name = PlaylistOperations.getPlaylistNameByID(id);
 			this.createPlaylist(name);
 			Playlist playlist = this.getPlaylist(name);
@@ -165,10 +166,10 @@ public abstract class Player {
 		return null;
 	}
 
-	public Song getSong(int id) {
+	public Song getSong(Song song) {
 		for(int i = 0; i < songs.size(); ++i) {
 			Song p = (Song) songs.get(i);
-			if(p.getSongID() == id) {
+			if(p.getSongID() == song.getSongID()) {
 				return p;
 			}
 		}

@@ -106,10 +106,9 @@ public class UserRequestHelper {
 			String firstname = (String) message.get("firstname");
 			String lastname = (String) message.get("lastname");
 			dob = (String) message.get("dob");
-			String doj = (String) message.get("date-joined");
 			u = (User) session.get(Constants.USER_SESSION_KEY);
 			try {
-				if (u.updateUserInfo(name, firstname, lastname, dob, doj))
+				if (u.updateUserInfo(name, firstname, lastname, dob))
 					response.put("status", "success");
 				else {
 					response.put("status", "error");

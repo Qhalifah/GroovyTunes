@@ -29,7 +29,7 @@ public class RegularPlayer extends Player {
 	}
 
 	@Override
-	public boolean addSongToPlaylist(String playlistName, int songID) throws IllegalOperationException {
+	public boolean addSongToPlaylist(String playlistName, Song song) throws IllegalOperationException {
 		if (songs.size() == Constants.MAX_SONGS)
 			throw new IllegalOperationException();
 		Playlist playlist = null;
@@ -42,7 +42,7 @@ public class RegularPlayer extends Player {
 		if (playlist == null)
 			throw new IllegalOperationException();
 		for (int i = 0; i < songs.size(); ++i) {
-			if (((Song) songs.get(i)).getSongID() == songID) {
+			if (((Song) songs.get(i)).getSongID() == song.getSongID()) {
 				try {
 					playlist.addSong((Song) songs.get(i));
 					added = true;

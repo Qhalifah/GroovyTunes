@@ -28,7 +28,7 @@ public class PremiumPlayer extends Player {
 	}
 
 	@Override
-	public boolean addSongToPlaylist(String playlistName, int songID) throws IllegalOperationException {
+	public boolean addSongToPlaylist(String playlistName, Song song) throws IllegalOperationException {
 		Playlist playlist = null;
 		boolean added = false;
 		for (int i = 0; i < playlists.size(); ++i) {
@@ -39,7 +39,7 @@ public class PremiumPlayer extends Player {
 		if (playlist == null)
 			throw new IllegalOperationException();
 		for (int i = 0; i < songs.size(); ++i) {
-			if (((Song) songs.get(i)).getSongID() == songID) {
+			if (((Song) songs.get(i)).getSongID() == song.getSongID()) {
 				try {
 					playlist.addSong((Song) songs.get(i));
 					added = true;

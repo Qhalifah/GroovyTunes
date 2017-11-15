@@ -116,6 +116,10 @@ public class UserAccountDetails {
 		return username;
 	}
 
+	String getPassword() {
+		return password;
+	}
+
 	String getFirstName() {
 		return firstName;
 	}

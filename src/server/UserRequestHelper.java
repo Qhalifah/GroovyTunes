@@ -11,7 +11,7 @@ import auth.Authenticate.AUTH_RESULT;
 import auth.Authenticate.AuthResult;
 import user.User;
 import utils.Constants;
-import utils.UserOperations;
+import utils.dbmgr.UserOperations;
 
 public class UserRequestHelper {
 

@@ -1,4 +1,4 @@
-package utils;
+package utils.dbmgr;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.text.SimpleDateFormat;
 
 import user.User;
+import utils.Constants;
 
 import java.sql.Date;
 

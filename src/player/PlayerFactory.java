@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import user.User;
-import utils.PlaylistOperations;
-import utils.SongOperations;
+import utils.dbmgr.PlaylistOperations;
+import utils.dbmgr.SongOperations;
 
 public abstract class PlayerFactory {
 

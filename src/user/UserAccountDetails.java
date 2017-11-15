@@ -8,7 +8,7 @@ import java.util.Date;
 import org.json.simple.JSONObject;
 
 import utils.Constants;
-import utils.UserOperations;
+import utils.dbmgr.UserOperations;
 
 /**
  * This class stored all details related to the user. It includes username,

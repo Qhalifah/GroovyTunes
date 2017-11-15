@@ -9,8 +9,8 @@ import org.json.simple.JSONObject;
 
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
-import utils.PlaylistOperations;
 import utils.Reason;
+import utils.dbmgr.PlaylistOperations;
 
 public abstract class Player {
 	protected List<Playable> songs;

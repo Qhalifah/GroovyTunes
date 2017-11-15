@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 import user.User;
-import utils.UserOperations;
+import utils.dbmgr.UserOperations;
 
 public class Authenticate {
 

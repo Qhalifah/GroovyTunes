@@ -6,7 +6,7 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import utils.Utility;
-import utils.GroovyConnection;
+import utils.dbmgr.GroovyConnection;
 
 public class WebSocket {
 

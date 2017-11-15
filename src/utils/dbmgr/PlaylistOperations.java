@@ -1,4 +1,4 @@
-package utils;
+package utils.dbmgr;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -12,6 +12,7 @@ import player.Playable;
 import player.Playlist;
 import player.Song;
 import user.User;
+import utils.Constants;
 
 public class PlaylistOperations {
 

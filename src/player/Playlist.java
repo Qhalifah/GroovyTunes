@@ -7,7 +7,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import utils.PlaylistOperations;
+import utils.dbmgr.PlaylistOperations;
 
 public class Playlist implements Playable {
 

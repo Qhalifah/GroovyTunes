@@ -27,13 +27,10 @@ public class User {
 		Date dob, Date dateJoined, boolean membershipStatus) {
 		this.details = new UserAccountDetails(username, password, firstName, lastName,
 			dob, dateJoined, membershipStatus);
-		player = null;
+		player = PlayerFactory.getPlayer(this);
 	}
 	
 	public Player getPlayer() {
-		if(player == null) {
-			player = PlayerFactory.getPlayer(this);
-		}
 		return player;
 	}
 	/**

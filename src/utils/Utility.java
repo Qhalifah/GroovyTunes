@@ -20,6 +20,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
 import player.Song;
+import utils.dbmgr.GroovyConnection;
 
 public class Utility {
 

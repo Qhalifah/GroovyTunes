@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import exceptions.IllegalOperationException;
 import exceptions.PlaylistNotCreatedException;
 import utils.Constants;
-import utils.PlaylistOperations;
 import utils.Reason;
+import utils.dbmgr.PlaylistOperations;
 
 public class RegularPlayer extends Player {
 

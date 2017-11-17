@@ -63,6 +63,7 @@ window.onload = function() {
         case 'ret-create-playlist':
             get_playlists();
             break;
+        case 'ret-remove-song':
         case 'ret-add-song':
             if(playlist == message.name){
                 get_playlist_songs(playlist);
@@ -96,7 +97,7 @@ function showSongs(_name, _songs, _add){
         if(_add){
             html += '<td onclick="clickedAddButton(\'' + _id + '\')">+</td>';
         }else{
-            html += '<td onclick="removeSong(\'' + _id + '\')">-</td>';
+            html += '<td onclick="remove_song(\'' + _id + '\')">-</td>';
         }
         html += '</tr>';
     });

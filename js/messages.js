@@ -49,10 +49,10 @@ function add_song(){
     var value =  $('#options').find(":selected").val();
     var split = value.split(" ")
     var msg = {
-        type: 'add-song',
+        'type': 'add-song',
         'level': 'playlist-level',
-        name: split[0],
-        id: split[1],
+        'name': split[0],
+        'id': split[1],
     }
     socket.send(JSON.stringify(msg));
 }
@@ -68,11 +68,12 @@ function rename_playlist(_new_name){
 }
 
 //need to be reworked
-function removeSong(_id){
+function remove_song(_id){
     var msg = {
-        type: 'removeSong',
-        playlistId: playlist.playlistId,
-        songId: _id,
+        'type': 'remove-song',
+        'level':'playlist-level',
+        'name': playlist,
+        'id': _id,
     }
     socket.send(JSON.stringify(msg));
 }

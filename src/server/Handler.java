@@ -138,8 +138,10 @@ public class Handler {
 
 			case "remove-song": // PUT
 				name = (String) msgJSON.get("name");
-				ID = (int) msgJSON.get("id");
+				ID = Integer.parseInt((String) msgJSON.get("id"));
 				response = new JSONObject();
+				response.put("type", "ret-remove-song");
+				response.put("name", name);
 				Song song = new Song(ID);
 				if (admin.getPlayer().removeSongFromPlaylist(name, song)) {
 					response.put("status", "success");

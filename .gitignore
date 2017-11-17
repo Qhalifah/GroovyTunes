@@ -16,5 +16,8 @@ conf/pwd
 .settings/
 .classpath
 
+# JUnit test reports
+test-reports/
+
 recompile.bat
 run_server.bat

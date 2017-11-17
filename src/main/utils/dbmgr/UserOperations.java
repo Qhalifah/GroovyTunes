@@ -82,8 +82,7 @@ public class UserOperations {
 		PreparedStatement stmt = GroovyConnection.getConnection().prepareStatement(query);
 		stmt.setBoolean(1, true);
 		stmt.setString(1, username);
-		//stmt.executeUpdate();
-		// TODO:
+		stmt.executeUpdate();
 	}
 
 }

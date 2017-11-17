@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="main" name="GroovyTunes">
-    <property name="src.dir" value="src/" />
+    <property name="src.dir" value="src/main/" />
     <property name="build.dir" value="build/" />
     <property name="lib.dir" value="lib/" />
     <property name="classes.dir" value="bin/" />
+    <property name="test.dir" value="src/tests/" />
+    <property name="report.dir" value="test-reports/" />
     <property name="mainclass" value="server.WebSocket" />
     <path id="tunes.classpath">
         <fileset dir="${lib.dir}">
@@ -35,6 +37,28 @@
                 <attribute name="Class-path" value="." />
             </manifest>
         </jar>
+    </target>
+
+    <!-- run unit test cases -->
+    <target name="test">
+        <delete dir="${report.dir}" />
+        <mkdir dir="${report.dir}" />
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath location="${lib.dir}/junit-4.12.jar" />
+            <classpath location="${lib.dir}/hamcrest-core-1.3.jar" />
+            <classpath>
+                <pathelement location="${lib.dir}" />
+                <pathelement path="${src.dir}" />
+                <pathelement path="${test.dir}" />
+            </classpath>
+            <formatter type="plain" />
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${report.dir}">
+                <fileset dir="${test.dir}">
+                    <include name="**/*Test*.java" />
+                </fileset>
+            </batchtest>
+        </junit>
     </target>
 
     <!-- default target -->

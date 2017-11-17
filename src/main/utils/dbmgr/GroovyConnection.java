@@ -14,7 +14,7 @@ public class GroovyConnection {
 	private static Connection conn = null;
 
 	public static Connection getConnection() throws SQLException, ClassNotFoundException, IOException {
-		if(conn == null || conn.isClosed()) {
+		if (conn == null || conn.isClosed()) {
 			System.out.println("Connecting to the DB");
 			conn = getFirstConnection();
 			System.out.println("Connected to the DB");
@@ -35,7 +35,7 @@ public class GroovyConnection {
 	}
 
 	public static void closeConnection() throws SQLException {
-		if(conn != null)
+		if (conn != null)
 			conn.close();
 	}
 }

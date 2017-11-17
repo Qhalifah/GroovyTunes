@@ -18,12 +18,12 @@ public class SongOperations {
 		String query = "SELECT * FROM " + Constants.SONG_TABLE;
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		ResultSet resultSet = statement.executeQuery();
-		while(resultSet.next()) {
+		while (resultSet.next()) {
 			Song s = new Song(resultSet.getInt("ID"), 
-					resultSet.getString("title"),
+					resultSet.getString("title"), 
 					resultSet.getString("artist"),
-					resultSet.getString("album"),
-					resultSet.getString("genre"),
+					resultSet.getString("album"), 
+					resultSet.getString("genre"), 
 					resultSet.getDouble("duration"),
 					resultSet.getString("url"));
 			songs.add(s);

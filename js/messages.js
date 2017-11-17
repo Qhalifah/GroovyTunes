@@ -45,17 +45,6 @@ function login(){
     socket.send(JSON.stringify(msg));
 }
 
-
-//need to be reworked
-function removeSong(_id){
-    var msg = {
-        type: 'removeSong',
-        playlistId: playlist.playlistId,
-        songId: _id,
-    }
-    socket.send(JSON.stringify(msg));
-}
-
 function add_song(){
     var value =  $('#options').find(":selected").val();
     var split = value.split(" ")
@@ -64,6 +53,26 @@ function add_song(){
         'level': 'playlist-level',
         name: split[0],
         id: split[1],
+    }
+    socket.send(JSON.stringify(msg));
+}
+
+function rename_playlist(_new_name){
+    var msg = {
+        'type': 'rename-playlist',
+        'level':'playlist-level',
+        'name': playlist,
+        'new-name': _new_name,
+    };
+    socket.send(JSON.stringify(msg));
+}
+
+//need to be reworked
+function removeSong(_id){
+    var msg = {
+        type: 'removeSong',
+        playlistId: playlist.playlistId,
+        songId: _id,
     }
     socket.send(JSON.stringify(msg));
 }

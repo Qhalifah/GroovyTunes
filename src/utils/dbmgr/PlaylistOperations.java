@@ -87,7 +87,7 @@ public class PlaylistOperations {
 		String query = "UPDATE " + Constants.PLAYLIST_TABLE + " SET name = ? WHERE playlist_ID = ?";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setString(1, newName);
-		statement.setInt(1, ID);
+		statement.setInt(2, ID);
 		statement.executeUpdate();
 	}
 

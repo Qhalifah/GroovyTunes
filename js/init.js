@@ -16,12 +16,7 @@ window.onload = function() {
             $(this).parent().text(originalValue);
             console.log('ding');
         }else{
-            var msg = {
-                type: 'changeName',
-                id: playlist.playlistId,
-                name: $(this).val(),
-            };
-            socket.send(JSON.stringify(msg));
+            rename_playlist($(this).val());
         }
         $(this).remove();
     });
@@ -72,6 +67,10 @@ window.onload = function() {
             if(playlist == message.name){
                 get_playlist_songs(playlist);
             }
+            break;
+        case 'ret-rename-playlist':
+            get_playlists();
+            $('#playlistTitle').html(message.name);
             break;
     }
   }

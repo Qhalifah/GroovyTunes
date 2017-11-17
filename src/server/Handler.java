@@ -97,9 +97,12 @@ public class Handler {
 				name = (String) msgJSON.get("name");
 				String newName = (String) msgJSON.get("new-name");
 				response = new JSONObject();
+				response.put("type", "ret-rename-playlist");
+				response.put("name", name);
 				try {
 					if (admin.getPlayer().renamePlaylist(name, newName)) {
 						response.put("status", "success");
+						response.put("name", newName);
 					} else {
 						response.put("status", "error");
 						response.put("message", "Unable to rename the playlist");

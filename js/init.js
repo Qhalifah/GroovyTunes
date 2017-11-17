@@ -42,24 +42,11 @@ window.onload = function() {
         case "retLogin":
             if(message.status == 'success'){
                 $('.sign_in').addClass('hidden');
-                var msg = {
-                    'type':'get-playlists',
-                    'level':'playlist-level',
-                }
-                socket.send(JSON.stringify(msg));
-                msg = {
-                    'type':'get-all-songs',
-                    'level':'playlist-level'
-                }
-                socket.send(JSON.stringify(msg));
+                get_playlists();
+                get_all_songs();
             }else{
                 alert(message.message);
             }
-            break;
-        case "retGetMusic":
-            songs = message.message;
-            break;
-        case "retGetUser":
             break;
         case "ret-get-playlists":
             playlists = message.playlists;
@@ -77,6 +64,10 @@ window.onload = function() {
                 s[_song.songID] = _song;
             });
             showSongs(message.name, s);
+            break;
+        case 'ret-create-playlist':
+            get_playlists();
+            break;
     }
   }
 
@@ -87,36 +78,30 @@ window.onload = function() {
   }
 };
 
-function showSongs(_name, _songs){
+function showSongs(_name, _songs, _add){
     var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
     var html = '<table class="table table-hover"><tr>';
     _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
     html += '</tr>';
-    _.each(_songs, function(_meta, _src) {
-      html += '<tr>';
-      _src = _src.replace(/\\/g,'\\\\');
-      _.each(fields, function(_field){
-          var toDisp = (_meta[_field] || '');
-        html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
-      });
-      html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
-      html += '</tr>';
+    _.each(_songs, function(_meta, _id) {
+        html += '<tr>';
+        _.each(fields, function(_field){
+            var toDisp = (_meta[_field] || '');
+            html += '<td onclick="dispPlayer(\'' + _id + '\')">' + toDisp + '</td>';
+        });
+        if(_add){
+            html += '<td onclick="addSong(\'' + _id + '\')">+</td>';
+        }else{
+            html += '<td onclick="removeSong(\'' + _id + '\')">-</td>';
+        }
+        html += '</tr>';
     });
     html += '</table>';
     $('#songs').html(html);
     $('#playlistTitle').html(_name);
 }
 function showAllSongs() {
-  showSongs('All Songs', songs)
-}
-
-function removeSong(_song){
-    var msg = {
-        type: 'removeSong',
-        playlistId: playlist.playlistId,
-        songId: _song,
-    }
-    socket.send(JSON.stringify(msg));
+    showSongs('All Songs', songs, true)
 }
 
 function addSong(_song){
@@ -129,45 +114,21 @@ function addSong(_song){
     $('#myModal').modal('show');
 }
 
-
-function dbAddSong(){
-    var value =  $('#options').find(":selected").val();
-    var split = value.split(" ")
-    var msg = {
-        type: 'addSong',
-        playlistId: split[0],
-        songId: split[1],
-    }
-    socket.send(JSON.stringify(msg));
-}
-
-function createPlaylist(){
-    var msg = {
-        type: 'createPlaylist'
-    }
-    socket.send(JSON.stringify(msg));
-}
-
 function capitalizeFirst(_str){
   return _str.charAt(0).toUpperCase() + _str.slice(1);
+}
+
+function generateName(){
+    return 'new_' + (new Date()).getMilliseconds();
 }
 
 function dispPlaylists(){
     var html = '';
         html += '<li onclick="showAllSongs()">' + 'All Songs' + '</li>';
     _.each(playlists, function(playlist){
-        html += '<li onclick="dispPlaylist(\'' + playlist.name + '\')">' + (playlist.name || 'New Playlist') + '</li>';
+        html += '<li onclick="get_playlist_songs(\'' + playlist.name + '\')">' + (playlist.name || 'New Playlist') + '</li>';
     });
     $('#playlists').html(html);
-}
-
-function dispPlaylist(_name){
-    var msg = {
-        'type': 'get-songs',
-        'name': _name,
-        'level':'playlist-level',
-    }
-    socket.send(JSON.stringify(msg));
 }
 
 
@@ -182,17 +143,4 @@ function sign_in(){
 
 function sign_up(){
 
-}
-
-
-function login(){
-    var username = $('#inputUsername').val();
-    var pass = $('#inputPassword').val();
-    var msg = {
-        'type': 'login',
-        'level': 'user',
-        'username': username,
-        'password':pass,
-    }
-    socket.send(JSON.stringify(msg));
 }

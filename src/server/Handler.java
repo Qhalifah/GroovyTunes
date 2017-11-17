@@ -76,6 +76,7 @@ public class Handler {
 			case "create-playlist": // POST
 				String name = (String) msgJSON.get("name");
 				response = new JSONObject();
+				response.put("type", "ret-create-playlist");
 				try {
 					admin.getPlayer().createPlaylist(name);
 					response.put("status", "success");
@@ -183,7 +184,7 @@ public class Handler {
 					session.getRemote().sendString(obj.toJSONString());
 				}
 				break;
-				
+
 			case "get-sharable-link":
 				name = (String) msgJSON.get("name");
 				response = new JSONObject();
@@ -191,7 +192,7 @@ public class Handler {
 				response.put("link", sharableLink);
 				session.getRemote().sendString(response.toJSONString());
 				break;
-				
+
 			case "add-shared-playlist":
 				String shareID = (String) msgJSON.get("id");
 				response = new JSONObject();

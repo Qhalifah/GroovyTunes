@@ -3,6 +3,7 @@ package player;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,6 +19,7 @@ public class Playlist implements Playable {
 	public Playlist(int ID, String name) {
 		this.ID = ID;
 		this.name = name;
+		songs = new ArrayList<Playable>();
 	}
 
 	@SuppressWarnings("unchecked")

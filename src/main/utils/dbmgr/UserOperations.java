@@ -58,6 +58,17 @@ public class UserOperations {
 		}
 		return userCreated;
 	}
+	
+	public static boolean removeUser(String name) throws ClassNotFoundException, SQLException, IOException {
+		boolean removed = false;
+		String query = "DELETE FROM " + Constants.USER_TABLE + " WHERE username = ?";
+		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setString(1, name);
+		if(statement.executeUpdate() == 1) {
+			removed = true;
+		}
+		return removed;
+	}
 
 	public static User findUser(String username) throws ClassNotFoundException, SQLException, IOException {
 		User u = null;
@@ -77,12 +88,12 @@ public class UserOperations {
 		return u;
 	}
 
-	public static void activatePremium(String username) throws ClassNotFoundException, SQLException, IOException {
+	public static boolean activatePremium(String username) throws ClassNotFoundException, SQLException, IOException {
 		String query = "UDPATE " + Constants.USER_TABLE + " SET status = ? WHERE username = ?";
 		PreparedStatement stmt = GroovyConnection.getConnection().prepareStatement(query);
 		stmt.setBoolean(1, true);
 		stmt.setString(1, username);
-		stmt.executeUpdate();
+		return stmt.executeUpdate() == 1;
 	}
 
 }

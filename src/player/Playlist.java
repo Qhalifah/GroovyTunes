@@ -73,7 +73,7 @@ public class Playlist implements Playable {
 	public JSONObject getAsJSON() {
 		JSONArray allSongsAsJSON = new JSONArray();
 		for (Playable p : songs) {
-			allSongsAsJSON.add(p.getAsJSON());
+			allSongsAsJSON.add(((Song)p).getMetaData());
 		}
 		JSONObject obj = new JSONObject();
 		obj.put("name", name);

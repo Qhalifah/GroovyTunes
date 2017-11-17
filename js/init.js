@@ -71,10 +71,12 @@ window.onload = function() {
             });
             showAllSongs();
             break;
-        case "retDispPlaylist":
-            playlist = message.message;
-            showPlaylist();
-            break;
+        case "ret-get-songs":
+            var s = {};
+            _.each(message.songs, function(_song){
+                s[_song.songID] = _song;
+            });
+            showSongs(message.name, s);
     }
   }
 
@@ -85,48 +87,27 @@ window.onload = function() {
   }
 };
 
-function showPlaylist() {
-  var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
-  var html = '<table class="table table-hover"><tr>';
-  _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
-  html += '</tr>';
-  _.each(songs, function(_meta, _src) {
-      if(!_.contains(playlist.songs, _meta.songId))return;
-    html += '<tr>';
-    _src = _src.replace(/\\/g,'\\\\');
-    _.each(fields, function(_field){
-        var toDisp = (_meta[_field] || '');
-      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
-    });
-    if(_.size(playlists) > 1 && playlist.name == "All Songs"){
-        html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
-    }
-    html += '<td onclick="removeSong(\'' + _meta.songId + '\')">-</td>';
+function showSongs(_name, _songs){
+    var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
+    var html = '<table class="table table-hover"><tr>';
+    _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
     html += '</tr>';
-  });
-  html += '</table>';
-  $('#songs').html(html);
-  $('#playlistTitle').html((playlist.name != "null" ? playlist.name : "New Playlist"));
+    _.each(_songs, function(_meta, _src) {
+      html += '<tr>';
+      _src = _src.replace(/\\/g,'\\\\');
+      _.each(fields, function(_field){
+          var toDisp = (_meta[_field] || '');
+        html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
+      });
+      html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
+      html += '</tr>';
+    });
+    html += '</table>';
+    $('#songs').html(html);
+    $('#playlistTitle').html(_name);
 }
-
 function showAllSongs() {
-  var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
-  var html = '<table class="table table-hover"><tr>';
-  _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
-  html += '</tr>';
-  _.each(songs, function(_meta, _src) {
-    html += '<tr>';
-    _src = _src.replace(/\\/g,'\\\\');
-    _.each(fields, function(_field){
-        var toDisp = (_meta[_field] || '');
-      html += '<td onclick="dispPlayer(\'' + _src + '\')">' + toDisp + '</td>';
-    });
-    html += '<td onclick="addSong(\'' + _meta.songId + '\')">+</td>';
-    html += '</tr>';
-  });
-  html += '</table>';
-  $('#songs').html(html);
-  $('#playlistTitle').html('All Songs');
+  showSongs('All Songs', songs)
 }
 
 function removeSong(_song){
@@ -173,6 +154,7 @@ function capitalizeFirst(_str){
 
 function dispPlaylists(){
     var html = '';
+        html += '<li onclick="showAllSongs()">' + 'All Songs' + '</li>';
     _.each(playlists, function(playlist){
         html += '<li onclick="dispPlaylist(\'' + playlist.name + '\')">' + (playlist.name || 'New Playlist') + '</li>';
     });

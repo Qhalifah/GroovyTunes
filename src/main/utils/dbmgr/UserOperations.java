@@ -92,7 +92,7 @@ public class UserOperations {
 		String query = "UDPATE " + Constants.USER_TABLE + " SET status = ? WHERE username = ?";
 		PreparedStatement stmt = GroovyConnection.getConnection().prepareStatement(query);
 		stmt.setBoolean(1, true);
-		stmt.setString(1, username);
+		stmt.setString(2, username);
 		return stmt.executeUpdate() == 1;
 	}
 

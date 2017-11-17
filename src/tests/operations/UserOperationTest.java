@@ -43,6 +43,7 @@ public class UserOperationTest {
 		assertTrue(found);
 	}
 	
+	@Test
 	public void testD_ActivatePremium() throws ClassNotFoundException, SQLException, IOException {
 		boolean premium = UserOperations.activatePremium(username);
 		assertTrue(premium);

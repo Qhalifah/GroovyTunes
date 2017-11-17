@@ -56,13 +56,14 @@ function removeSong(_id){
     socket.send(JSON.stringify(msg));
 }
 
-function dbAddSong(){
+function add_song(){
     var value =  $('#options').find(":selected").val();
     var split = value.split(" ")
     var msg = {
-        type: 'addSong',
-        playlistId: split[0],
-        songId: split[1],
+        type: 'add-song',
+        'level': 'playlist-level',
+        name: split[0],
+        id: split[1],
     }
     socket.send(JSON.stringify(msg));
 }

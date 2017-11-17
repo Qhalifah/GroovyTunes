@@ -46,7 +46,7 @@ public class PlaylistOperations {
 		}
 		return playlists;
 	}
-	
+
 	public static int createPlaylist(String user, String name) throws ClassNotFoundException, SQLException, IOException {
 		int ID = -1;
 		String query = "SELECT MAX(playlist_ID) FROM " + Constants.PLAYLIST_TABLE;
@@ -76,6 +76,8 @@ public class PlaylistOperations {
 		String query = "INSERT INTO " + Constants.PLAYLIST_SONGS + "(playlist_ID, song_ID) VALUES "
 				+ "(?,?)";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
+		statement.setInt(1, songID);
+		statement.setInt(2, id);
 		if(statement.executeUpdate() == 1)
 			inserted = true;
 		return inserted;
@@ -122,7 +124,7 @@ public class PlaylistOperations {
 		}
 		return name;
 	}
-	
+
 	public static List<Playable> getAllSongsByID(int id) throws ClassNotFoundException, SQLException, IOException {
 		String query = "SELECT * FROM " + Constants.SONG_TABLE + " WHERE ID IN (SELECT song_ID FROM " + Constants.PLAYLIST_SONGS + " WHERE playlist_ID = ?)";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
@@ -142,5 +144,3 @@ public class PlaylistOperations {
 		return songs;
 	}
 }
-
-

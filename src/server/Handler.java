@@ -113,8 +113,10 @@ public class Handler {
 
 			case "add-song": // PUT
 				name = (String) msgJSON.get("name");
-				int ID = (int) msgJSON.get("id");
+				int ID = Integer.parseInt((String)msgJSON.get("id"));
 				response = new JSONObject();
+				response.put("type", "ret-add-song");
+				response.put("name", name);
 				try {
 					Song song = new Song(ID);
 					if (admin.getPlayer().addSongToPlaylist(name, song)) {

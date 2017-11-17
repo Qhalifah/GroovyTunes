@@ -1,9 +1,8 @@
 var socket = null;
 var isopen = false;
 var songs = {};
-var user = {};
 var playlists = {};
-var playlist = {};
+var playlist = '';
 window.onload = function() {
     var originalValue;
     $('#playlistTitle').on('dblclick', function(){
@@ -41,7 +40,7 @@ window.onload = function() {
     switch(message.type){
         case "retLogin":
             if(message.status == 'success'){
-                $('.sign_in').addClass('hidden');
+                $('.sign_in').addClass('hidden_element');
                 get_playlists();
                 get_all_songs();
             }else{
@@ -59,6 +58,7 @@ window.onload = function() {
             showAllSongs();
             break;
         case "ret-get-songs":
+            playlist = message.name;
             var s = {};
             _.each(message.songs, function(_song){
                 s[_song.songID] = _song;
@@ -67,6 +67,11 @@ window.onload = function() {
             break;
         case 'ret-create-playlist':
             get_playlists();
+            break;
+        case 'ret-add-song':
+            if(playlist == message.name){
+                get_playlist_songs(playlist);
+            }
             break;
     }
   }
@@ -90,7 +95,7 @@ function showSongs(_name, _songs, _add){
             html += '<td onclick="dispPlayer(\'' + _id + '\')">' + toDisp + '</td>';
         });
         if(_add){
-            html += '<td onclick="addSong(\'' + _id + '\')">+</td>';
+            html += '<td onclick="clickedAddButton(\'' + _id + '\')">+</td>';
         }else{
             html += '<td onclick="removeSong(\'' + _id + '\')">-</td>';
         }
@@ -104,11 +109,10 @@ function showAllSongs() {
     showSongs('All Songs', songs, true)
 }
 
-function addSong(_song){
+function clickedAddButton(_id){
     html = '';
     _.each(playlists, function(playlist){
-        if(playlist.playlistName == "All Songs") return;
-        html += '<option value="' + playlist.playlistId +  ' ' + _song + '">' + (playlist.playlistName || 'New Playlist') + '</option>';
+        html += '<option value="' + playlist.name +  ' ' + _id + '">' + playlist.name + '</option>';
     });
     $('#options').html(html);
     $('#myModal').modal('show');

@@ -3,7 +3,8 @@
     <property name="src.dir" value="src/main/" />
     <property name="build.dir" value="build/" />
     <property name="lib.dir" value="lib/" />
-    <property name="classes.dir" value="bin/" />
+    <property name="classes.dir" value="bin/src/" />
+    <property name="classes.test.dir" value="bin/tests/" />
     <property name="test.dir" value="src/tests/" />
     <property name="report.dir" value="test-reports/" />
     <property name="mainclass" value="server.WebSocket" />
@@ -15,6 +16,7 @@
 
     <!-- removes JAR file and class files -->
     <target name="clean">
+        <delete dir="${classes.test.dir}" />
         <delete dir="${classes.dir}" />
         <delete dir="${build.dir}" />
     </target>
@@ -22,7 +24,14 @@
     <!-- compiles java files to class files -->
     <target name="compile">
         <mkdir dir="${classes.dir}" />
+        <mkdir dir="${classes.test.dir}" />
+        <echo message="Compiling source files" />
         <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" debug="true">
+            <classpath refid="tunes.classpath" />
+        </javac>
+        <echo message="Compiling tests" />
+        <javac srcdir="${test.dir}" destdir="${classes.test.dir}" includeantruntime="false" debug="true">
+            <classpath location="${classes.dir}" />
             <classpath refid="tunes.classpath" />
         </javac>
     </target>
@@ -40,16 +49,14 @@
     </target>
 
     <!-- run unit test cases -->
-    <target name="test">
+    <target name="test" depends="clean, compile">
         <delete dir="${report.dir}" />
         <mkdir dir="${report.dir}" />
         <junit printsummary="yes" haltonfailure="yes">
-            <classpath location="${lib.dir}/junit-4.12.jar" />
-            <classpath location="${lib.dir}/hamcrest-core-1.3.jar" />
             <classpath>
-                <pathelement location="${lib.dir}" />
-                <pathelement path="${src.dir}" />
-                <pathelement path="${test.dir}" />
+                <path refid="tunes.classpath" />
+                <pathelement path="${classes.dir}" />
+                <pathelement path="${classes.test.dir}" />
             </classpath>
             <formatter type="plain" />
             <formatter type="xml" />
@@ -62,5 +69,5 @@
     </target>
 
     <!-- default target -->
-    <target name="main" depends="clean,compile,build" />
+    <target name="main" depends="clean, compile, build" />
 </project>

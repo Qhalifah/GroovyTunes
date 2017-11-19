@@ -8,7 +8,14 @@
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/signIn.css">
 
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$( function() {
+  $( "#tabs" ).tabs();
+  $( "#inputDOB" ).datepicker();
+} );
+</script>
 
 <header>
   <meta charset="utf-8">
@@ -32,17 +39,44 @@
 
   <div class='sign_in'>
       <div class="container">
-
-        <form class="form-signin">
-          <h2 class="form-signin-heading">Please sign in</h2>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox">
-          </div>
-              <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
-        </form>
+        <div id="tabs">
+          <ul>
+            <li><a href="#tabs-1">Login</a></li>
+            <li><a href="#tabs-2">Registration</a></li>
+          </ul>
+          <div id="tabs-1" class="container">
+              <form class="form-signin">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                  </label>
+                </div>
+                    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
+              </form>
+          </div> <!-- /container -->
+          <div id="tabs-2" class="container">
+              <form class="form-registration">
+                <h2 class="form-registration-heading">Enter the registration details</h2>
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <label for="inputFirstName" class="sr-only">FirstName</label>
+                <input id="inputFirstName" class="form-control" placeholder="First Name" required autofocus>
+                <label for="inputFirstName" class="sr-only">LastName</label>
+                <input id="inputFirstName" class="form-control" placeholder="Last Name" required autofocus>
+                <label for="inputDOB" class="sr-only">Date of Birth</label>
+                <input id="inputDOB" class="form-control" placeholder="Date of Birth" required autofocus>
+                <br>
+                <button class="btn btn-lg btn-primary btn-block" type="button" onclick="registration()">Register</button>
+              </form>
+          </div> <!-- /container -->
+        </div>
       </div>
 </div>
 

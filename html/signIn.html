@@ -5,11 +5,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Login page for GroovyTunes">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#tabs" ).tabs();
+      $( "#inputDOB" ).datepicker();
+    } );
+    </script>
     <title>Groovy Tunes</title>
 
     <!-- Bootstrap core CSS -->
@@ -21,24 +29,44 @@
   </head>
 
   <body>
-
-    <div class="container">
-		<img src = "../media/images/Groovy_Tunes_logo_Trans.png" alt="Groovy Tunes Logo" class = "img-responsive center-block"/>
-
-      <form class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
-            <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
-      </form>
-    </div> <!-- /container -->
-
+    <div id="tabs">
+      <img src = "../media/images/Groovy_Tunes_logo_Trans.png" alt="Groovy Tunes Logo" class = "img-responsive center-block"/>
+      <ul>
+        <li><a href="#tabs-1">Login</a></li>
+        <li><a href="#tabs-2">Registration</a></li>
+      </ul>
+      <div id="tabs-1" class="container">
+        <form class="form-signin">
+          <h2 class="form-signin-heading">Please sign in</h2>
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+              <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
+        </form>
+      </div> <!-- /container -->
+      <div id="tabs-2" class="container">
+      <form class="form-registration">
+          <h2 class="form-registration-heading">Enter the registration details</h2>
+          <label for="inputUsername" class="sr-only">Username</label>
+          <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          <label for="inputFirstName" class="sr-only">FirstName</label>
+          <input id="inputFirstName" class="form-control" placeholder="First Name" required autofocus>
+          <label for="inputFirstName" class="sr-only">LastName</label>
+          <input id="inputFirstName" class="form-control" placeholder="Last Name" required autofocus>
+          <label for="inputDOB" class="sr-only">Date of Birth</label>
+          <input id="inputDOB" class="form-control" placeholder="Date of Birth" required autofocus>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="button" onclick="registration()">Register</button>
+        </form>
+      </div> <!-- /container -->
+    </div>
   </body>
 </html>

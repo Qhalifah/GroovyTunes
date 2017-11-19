@@ -7,8 +7,18 @@ body {
   padding: 15px;
   margin: 0 auto;
 }
+.form-registration {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
+  margin-bottom: 10px;
+}
+
+.form-registration .form-registration-heading,
+.form-registration .checkbox {
   margin-bottom: 10px;
 }
 .form-signin .checkbox {

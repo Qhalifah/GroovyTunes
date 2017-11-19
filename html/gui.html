@@ -12,8 +12,8 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $( function() {
-  $( "#tabs" ).tabs();
   $( "#inputDOB" ).datepicker();
+  $( "#tabs" ).tabs();
 } );
 </script>
 
@@ -25,26 +25,27 @@ $( function() {
 </header>
 
 <body>
-  <div id='sideBar'>
-      <h1>Playlists</h1>
-      <ul id = "playlists">
-      </ul>
-      <div id = "newPlaylist" onclick="createPlaylist()">Create new Playlist</div>
-  </div>
-  <div id="main">
-      <div id="playlistTitle"></div>
-      <div id="player"></div>
-      <div id="songs"></div>
-  </div>
+    <div id='sideBar'>
+        <h1>Playlists</h1>
+        <ul id = "playlists">
+        </ul>
+        <div id = "newPlaylist" onclick="createPlaylist()">Create new Playlist</div>
+    </div>
+    <div id="main">
+        <div id="playlistTitle"></div>
+        <div id="player"></div>
+        <div id="songs"></div>
+    </div>
 
-  <div class='sign_in'>
-      <div class="container">
-        <div id="tabs">
-          <ul>
-            <li><a href="#tabs-1">Login</a></li>
-            <li><a href="#tabs-2">Registration</a></li>
+    <div class='sign_in'>
+      <div class="form-signin">
+          <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#signin">Sign In</a></li>
+            <li></li>
+            <li><a data-toggle="pill" href="#registration">Registration</a></li>
           </ul>
-          <div id="tabs-1" class="container">
+          <div class="tab-content">
+            <div id="signin" class="tab-pane fade in active">
               <form class="form-signin">
                 <h2 class="form-signin-heading">Please sign in</h2>
                 <label for="inputEmail" class="sr-only">Email address</label>
@@ -56,57 +57,44 @@ $( function() {
                     <input type="checkbox" value="remember-me"> Remember me
                   </label>
                 </div>
-                    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
               </form>
-          </div> <!-- /container -->
-          <div id="tabs-2" class="container">
+            </div>
+            <div id="registration" class="tab-pane fade">
               <form class="form-registration">
                 <h2 class="form-registration-heading">Enter the registration details</h2>
-                <label for="inputUsername" class="sr-only">Username</label>
-                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                 <label for="inputFirstName" class="sr-only">FirstName</label>
                 <input id="inputFirstName" class="form-control" placeholder="First Name" required autofocus>
                 <label for="inputFirstName" class="sr-only">LastName</label>
                 <input id="inputFirstName" class="form-control" placeholder="Last Name" required autofocus>
                 <label for="inputDOB" class="sr-only">Date of Birth</label>
                 <input id="inputDOB" class="form-control" placeholder="Date of Birth" required autofocus>
-                <br>
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                 <button class="btn btn-lg btn-primary btn-block" type="button" onclick="registration()">Register</button>
               </form>
-          </div> <!-- /container -->
-        </div>
+            </div>
+          </div>
       </div>
-</div>
-
-
-
-
-
-
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-    <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">Choose a Playlist</h3>
     </div>
-    <div class="modal-body">
-      <select id = "options">
-      </select>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3 id="myModalLabel">Choose a Playlist</h3>
+                </div>
+                <div class="modal-body">
+                  <select id = "options">
+                  </select>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                  <button class="btn btn-primary" data-dismiss="modal" onclick="add_song()">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-      <button class="btn btn-primary" data-dismiss="modal" onclick="add_song()">Save changes</button>
-    </div>
-    </div>
-    </div>
-  </div>
-
-
-
-
-
 </body>

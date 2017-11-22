@@ -76,6 +76,14 @@ img.center {
 #newPlaylist:hover{
     background-color: #111;
 }
+#logoutUser{
+    color:white;
+    text-align: center;
+}
+
+#logoutUser:hover{
+    background-color: #111;
+}
 
 #main {
     position: absolute;
@@ -85,7 +93,9 @@ img.center {
 .hidden_element{
     visibility:hidden;
 }
-
+.visible_element{
+    visibility:visible;
+}
 
 #songs{
     overflow:auto;

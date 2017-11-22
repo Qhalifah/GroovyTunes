@@ -26,7 +26,7 @@ public class UserRequestHelper {
 		String type = (String) message.get("type");
 		JSONObject response;
 		switch (type) {
-		case "check-username":
+		case "checkusername":
 			response = new JSONObject();
 			String name = (String) message.get("username");
 			if (UserOperations.isUsernameAvailable(name)) {
@@ -38,10 +38,10 @@ public class UserRequestHelper {
 			session.getRemote().sendString(response.toJSONString());
 			break;
 
-		case "create-account":
+		case "registration":
 			response = new JSONObject();
-			name = (String) message.get("username");
-			String password = (String) message.get("password");
+			name = (String) message.get("regusername");
+			String password = (String) message.get("regpassword");
 			String firstName = null, lastName = null, dob = null;
 			if (message.containsKey("firstname"))
 				firstName = (String) message.get("firstname");
@@ -50,8 +50,11 @@ public class UserRequestHelper {
 			if (message.containsKey("dob"))
 				dob = (String) message.get("dob");
 			if (UserOperations.createUser(name, password, firstName, lastName, dob)) {
+				response.put("type", "retRegistration");
 				response.put("status", "success");
+				response.put("message", "User added login now!");
 			} else {
+				response.put("type", "retRegistration");
 				response.put("status", "error");
 				response.put("message", "unable to create a user");
 			}
@@ -82,7 +85,9 @@ public class UserRequestHelper {
 		case "logout":
 			response = new JSONObject();
 			session.remove(Constants.USER_SESSION_KEY);
+			response.put("type", "retLogout");
 			response.put("status", "success");
+			response.put("message", "Logged out!");
 			session.getRemote().sendString(response.toJSONString());
 			session.invalidate();
 			break;

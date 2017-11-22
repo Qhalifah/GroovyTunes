@@ -12,7 +12,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $( function() {
-  $( "#inputDOB" ).datepicker();
+  //$( "#inputDOB" ).datepicker();
   $( "#tabs" ).tabs();
 } );
 </script>
@@ -30,6 +30,7 @@ $( function() {
         <ul id = "playlists">
         </ul>
         <div id = "newPlaylist" onclick="createPlaylist()">Create new Playlist</div>
+        <div id = "logoutUser" onclick="logout()">Logout</div>
     </div>
     <div id="main">
         <div id="playlistTitle"></div>
@@ -65,14 +66,14 @@ $( function() {
                 <h2 class="form-registration-heading">Enter the registration details</h2>
                 <label for="inputFirstName" class="sr-only">FirstName</label>
                 <input id="inputFirstName" class="form-control" placeholder="First Name" required autofocus>
-                <label for="inputFirstName" class="sr-only">LastName</label>
-                <input id="inputFirstName" class="form-control" placeholder="Last Name" required autofocus>
+                <label for="inputLastName" class="sr-only">LastName</label>
+                <input id="inputLastName" class="form-control" placeholder="Last Name" required autofocus>
                 <label for="inputDOB" class="sr-only">Date of Birth</label>
-                <input id="inputDOB" class="form-control" placeholder="Date of Birth" required autofocus>
-                <label for="inputUsername" class="sr-only">Username</label>
-                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <input type=text  data-date-format='yyyy-mm-dd' id="inputDOB" class="form-control" placeholder="Date of Birth" required autofocus>
+                <label for="regUsername" class="sr-only">Username</label>
+                <input id="regUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="regPassword" class="sr-only">Password</label>
+                <input type="password" id="regPassword" class="form-control" placeholder="Password" required>
                 <button class="btn btn-lg btn-primary btn-block" type="button" onclick="registration()">Register</button>
               </form>
             </div>

@@ -33,6 +33,13 @@ window.onload = function() {
     var message = JSON.parse(e.data);
     console.log(message);
     switch(message.type){
+        case "retRegistration":
+          if(message.status == 'success'){
+              alert(message.message);
+          }else{
+              alert(message.message);
+          }
+          break;
         case "retLogin":
             if(message.status == 'success'){
                 $('.sign_in').addClass('hidden_element');
@@ -42,6 +49,13 @@ window.onload = function() {
                 alert(message.message);
             }
             break;
+        case "retLogout":
+              if(message.status == 'success'){
+                  $('.sign_in').addClass('visible_element');
+              }else{
+                  alert(message.message);
+              }
+              break;
         case "ret-get-playlists":
             playlists = message.playlists;
             dispPlaylists();

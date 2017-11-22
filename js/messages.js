@@ -45,6 +45,32 @@ function login(){
     socket.send(JSON.stringify(msg));
 }
 
+function registration(){
+    var firstname= $('#inputFirstName').val();
+    var lastname= $('#inputLastName').val();
+    var dob= $('#inputDOB').val();
+    var regusername = $('#regUsername').val();
+    var regpass = $('#regPassword').val();
+    var msg = {
+        'type': 'registration',
+        'level': 'user',
+        'firstname':firstname,
+        'lastname':lastname,
+        'dob':dob,
+        'regusername': regusername,
+        'regpassword':regpass,
+    }
+    socket.send(JSON.stringify(msg));
+}
+
+function logout(){
+    var msg = {
+        type: 'logout',
+        level:'user',
+    }
+    socket.send(JSON.stringify(msg));
+}
+
 function add_song(){
     var value =  $('#options').find(":selected").val();
     var split = value.split(" ")

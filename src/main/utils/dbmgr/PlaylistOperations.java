@@ -87,34 +87,36 @@ public class PlaylistOperations {
 		return inserted;
 	}
 
-	public static void renamePlaylist(int ID, String newName) throws ClassNotFoundException, SQLException, IOException {
+	public static int renamePlaylist(int ID, String newName) throws ClassNotFoundException, SQLException, IOException {
 		String query = "UPDATE " + Constants.PLAYLIST_TABLE + " SET name = ? WHERE playlist_ID = ?";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setString(1, newName);
 		statement.setInt(2, ID);
-		statement.executeUpdate();
+		return statement.executeUpdate();
 	}
 
-	public static void removeSong(int playlistID, int songID) throws ClassNotFoundException, SQLException, IOException {
+	public static boolean removeSong(int playlistID, int songID) throws ClassNotFoundException, SQLException, IOException {
 		String query = "DELETE FROM " + Constants.PLAYLIST_SONGS + " WHERE song_ID = ? AND playlist_ID = ?";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setInt(1, songID);
 		statement.setInt(2, playlistID);
-		statement.executeUpdate();
+		return 	statement.executeUpdate() == 1;
 	}
 
-	public static void removePlaylist(int playlistID, String username) throws ClassNotFoundException, SQLException, IOException {
+	public static boolean removePlaylist(int playlistID, String username) throws ClassNotFoundException, SQLException, IOException {
+		boolean success = false;
 		// Remove a playlist from user's accoutn
 		String query = "DELETE FROM " + Constants.PLAYLIST_TABLE + " WHERE playlist_ID = ? AND username = ?";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setInt(1, playlistID);
 		statement.setString(2, username);
-		statement.executeUpdate();
+		success = statement.executeUpdate() == 1;
 		// Remove all songs in the playlist
 		query = "DELETE FROM " + Constants.PLAYLIST_SONGS + " WHERE playlist_ID = ?";
 		statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setInt(1, playlistID);
 		statement.executeUpdate();
+		return success;
 	}
 
 	public static String getPlaylistNameByID(int id) throws ClassNotFoundException, SQLException, IOException {

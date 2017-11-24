@@ -21,6 +21,7 @@ import user.User;
 import utils.Constants;
 import utils.Reason;
 import utils.Utility;
+import utils.dbmgr.GroovyConnection;
 
 @WebSocket
 public class Handler {
@@ -34,8 +35,9 @@ public class Handler {
 	}
 
 	@OnWebSocketClose
-	public void onClose(int statusCode, String reason) {
+	public void onClose(int statusCode, String reason) throws Exception {
 		System.out.println("Close: statusCode=" + statusCode + ", reason=" + reason);
+		GroovyConnection.closeConnection();
 	}
 
 	@OnWebSocketError

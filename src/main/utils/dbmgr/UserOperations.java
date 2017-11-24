@@ -58,7 +58,7 @@ public class UserOperations {
 		}
 		return userCreated;
 	}
-	
+
 	public static boolean removeUser(String name) throws ClassNotFoundException, SQLException, IOException {
 		boolean removed = false;
 		String query = "DELETE FROM " + Constants.USER_TABLE + " WHERE username = ?";
@@ -77,10 +77,10 @@ public class UserOperations {
 		stmt.setString(1, username);
 		ResultSet set = stmt.executeQuery();
 		if (set.next()) {
-			u = new User(set.getString("username"), 
-					set.getString("password"), 
+			u = new User(set.getString("username"),
+					set.getString("password"),
 					set.getString("firstname"),
-					set.getString("lastname"), 
+					set.getString("lastname"),
 					set.getDate("date_of_birth"),
 					set.getDate("date_joined"),
 					set.getBoolean("status"));

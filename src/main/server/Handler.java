@@ -181,15 +181,19 @@ public class Handler {
 
 			case "play":
 				String typeOfPlayble = (String) msgJSON.get("type-of-playble");
+				JSONObject obj = new JSONObject();
 				if(typeOfPlayble.equals("playlist")) {
 					name = (String) msgJSON.get("name");
-					JSONObject obj = admin.getPlayer().getPlaylist(name).play();
-					session.getRemote().sendString(obj.toJSONString());
+					obj = admin.getPlayer().getPlaylist(name).play();
+					obj.put("type-of-playable", "playlist");
+
 				} else {
 					int id = Integer.parseInt((String) msgJSON.get("id"));
-					JSONObject obj = admin.getPlayer().getSong(new Song(id)).play();
-					session.getRemote().sendString(obj.toJSONString());
+					obj = admin.getPlayer().getSong(new Song(id)).play();
+					obj.put("type-of-playable", "song");
 				}
+				obj.put("type", "ret-play");
+				session.getRemote().sendString(obj.toJSONString());
 				break;
 
 			case "get-sharable-link":

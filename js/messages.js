@@ -6,6 +6,15 @@ function get_playlists(){
     socket.send(JSON.stringify(msg));
 }
 
+function get_playable_song(_id){
+    var msg = {
+        'type':'play',
+        'level':'playlist-level',
+        'type-of-playble':'song',
+        'id':_id,
+    }
+    socket.send(JSON.stringify(msg));
+}
 
 function get_all_songs(){
     msg = {
@@ -93,7 +102,6 @@ function rename_playlist(_new_name){
     socket.send(JSON.stringify(msg));
 }
 
-//need to be reworked
 function remove_song(_id){
     var msg = {
         'type': 'remove-song',

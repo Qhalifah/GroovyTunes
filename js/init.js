@@ -87,6 +87,13 @@ window.onload = function() {
             get_playlists();
             $('#playlistTitle').html(message.name);
             break;
+        case 'ret-play':
+            if(message['type-of-playable'] == 'playlist'){
+
+            }else{
+                dispPlayer(message.id, message.url);
+            }
+            break;
     }
   }
 
@@ -106,7 +113,7 @@ function showSongs(_name, _songs, _add){
         html += '<tr>';
         _.each(fields, function(_field){
             var toDisp = (_meta[_field] || '');
-            html += '<td onclick="dispPlayer(\'' + _id + '\')">' + toDisp + '</td>';
+            html += '<td onclick="get_playable_song(\'' + _id + '\')">' + toDisp + '</td>';
         });
         if(_add){
             html += '<td onclick="clickedAddButton(\'' + _id + '\')">+</td>';
@@ -150,8 +157,8 @@ function dispPlaylists(){
 }
 
 
-function dispPlayer(_src){
-  html = '<h3>' + songs[_src].title + ' by ' + songs[_src].albumartist +'</h3><audio controls><source src="\.' + _src + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+function dispPlayer(_id, _url){
+  html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumartist +'</h3><audio controls><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
 }
 

@@ -30,7 +30,7 @@ public class PremiumPlayerTest {
 	}
 	
 	@Test
-	public void testB_CreatePlaylist() throws ClassNotFoundException, SQLException, IOException, PlaylistNotCreatedException {
+	public void testB_PlaylistOperations() throws ClassNotFoundException, SQLException, IOException, PlaylistNotCreatedException {
 		User user = Authenticate.authUser("test-user", "test-password").getUser();
 		try {
 			user.getPlayer().createPlaylist("test-playlist");
@@ -39,13 +39,15 @@ public class PremiumPlayerTest {
 			System.err.println("REASON: " + e.getReason());
 			assertTrue(false);
 		}
-		assertTrue(user.getPlayer().playlists.size() == 1);
-		if(user.getPlayer().renamePlaylist("test-playlist", "new-test-playlist") == false) {
+		System.out.println("ck1");
+		if(user.getPlayer().renamePlaylist("test-playlist", "new-playlist") == false) {
 			assertTrue(false);
 		}
-		if(user.getPlayer().removePlaylist("new-test-playlist") == false) {
-			assertTrue(false);
-		}
+		System.out.println("ck2");
+		user.getPlayer().removePlaylist("test-playlist");
+		System.out.println("ck3");
+		user.getPlayer().removePlaylist("new-playlist");
+		System.out.println("ck4");
 		assertTrue(true);
 		
 	}

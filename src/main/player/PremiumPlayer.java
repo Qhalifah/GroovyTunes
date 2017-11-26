@@ -17,9 +17,11 @@ public class PremiumPlayer extends Player {
 	@Override
 	public void createPlaylist(String name) throws PlaylistNotCreatedException {
 		try {
-			if (PlaylistOperations.createPlaylist(username, name) == -1)
+			int id = PlaylistOperations.createPlaylist(username, name);
+			if (id == -1)
 				throw new PlaylistNotCreatedException(Reason.UNKNOWN);
-			Playlist p = new Playlist(playlists.size(), name);
+			Playlist p = new Playlist(id, name);
+			System.out.println("after creating: playlist ID = " + p.getID());
 			playlists.add(p);
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			throw new PlaylistNotCreatedException(Reason.UNKNOWN, e);

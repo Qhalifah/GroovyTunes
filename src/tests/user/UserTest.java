@@ -58,7 +58,7 @@ public class UserTest {
 		JSONObject userInfo = user.getUserInfo();
 		success = ((String) userInfo.get("firstName")).equals("test-firstname")
 				& ((String) userInfo.get("lastName")).equals("test-lastname")
-				& ((boolean) userInfo.get("membershipStatus") == false);
+				& ((boolean) userInfo.get("membershipStatus") == true);
 		assertTrue(success);
 	}
 

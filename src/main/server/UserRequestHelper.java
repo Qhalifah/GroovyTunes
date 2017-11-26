@@ -40,7 +40,7 @@ public class UserRequestHelper {
 
 		case "registration":
 			response = new JSONObject();
-			name = (String) message.get("regusername");
+			String username = (String) message.get("regusername");
 			String password = (String) message.get("regpassword");
 			String firstName = null, lastName = null, dob = null;
 			if (message.containsKey("firstname"))
@@ -49,14 +49,20 @@ public class UserRequestHelper {
 				lastName = (String) message.get("lastname");
 			if (message.containsKey("dob"))
 				dob = (String) message.get("dob");
-			if (UserOperations.createUser(name, password, firstName, lastName, dob)) {
-				response.put("type", "retRegistration");
-				response.put("status", "success");
-				response.put("message", "User added login now!");
-			} else {
+			if(UserOperations.isUsernameAvailable(username)){
+					if (UserOperations.createUser(username, password, firstName, lastName, dob)) {
+						response.put("type", "retRegistration");
+						response.put("status", "success");
+						response.put("message", "User added login now!");
+					} else {
+						response.put("type", "retRegistration");
+						response.put("status", "error");
+						response.put("message", "unable to create a user");
+					}
+			}else{
 				response.put("type", "retRegistration");
 				response.put("status", "error");
-				response.put("message", "unable to create a user");
+				response.put("message", "username not available!");
 			}
 			session.getRemote().sendString(response.toJSONString());
 			break;

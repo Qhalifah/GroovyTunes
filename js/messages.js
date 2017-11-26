@@ -16,6 +16,16 @@ function get_playable_song(_id){
     socket.send(JSON.stringify(msg));
 }
 
+function get_playable_playlist(){
+    var msg = {
+        'type':'play',
+        'level':'playlist-level',
+        'type-of-playble':'playlist',
+        'name':playlist,
+    }
+    socket.send(JSON.stringify(msg));
+}
+
 function get_all_songs(){
     msg = {
         'type':'get-all-songs',

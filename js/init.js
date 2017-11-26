@@ -2,6 +2,7 @@ var socket = null;
 var isopen = false;
 var songs = {};
 var playlists = {};
+var songsToPlay = [];
 var playlist = '';
 var username = '';
 
@@ -22,7 +23,6 @@ window.onload = function() {
         }
         $(this).remove();
     });
-
 
 
 
@@ -118,8 +118,13 @@ window.onload = function() {
             break;
         case 'ret-play':
             if(message['type-of-playable'] == 'playlist'){
-
+                songsToPlay = message.songs
+                var song = songsToPlay.shift();
+                if (song){
+                    dispPlayer(song.id, song.url);
+                }
             }else{
+                songsToPlay = [];
                 dispPlayer(message.id, message.url);
             }
             break;
@@ -186,8 +191,13 @@ function dispPlaylists(){
     $('#playlists').html(html);
 }
 
-
 function dispPlayer(_id, _url){
-  html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumArtist +'</h3><audio id="playBar" controls><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
-  $('#player').html(html);
+    html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumArtist +'</h3><audio id="playBar" controls autoplay><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+    $('#player').html(html);
+    $('#playBar').bind('ended', function(){
+        var song = songsToPlay.shift();
+        if(song){
+            dispPlayer(song.id, song.url);
+        }
+    });
 }

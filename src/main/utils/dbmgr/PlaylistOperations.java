@@ -53,7 +53,7 @@ public class PlaylistOperations {
 		Statement stmt = GroovyConnection.getConnection().createStatement();
 		ResultSet set = stmt.executeQuery(query);
 		if(set.next()) {
-			ID = set.getInt(1);
+			ID = set.getInt(1) + 1;
 		} else {
 			ID = 1;
 		}
@@ -64,9 +64,12 @@ public class PlaylistOperations {
 		statement.setString(2, user);
 		statement.setString(3, name);
 		try {
+			System.out.println("LOG: " + "adding to DB");
 			ID = statement.executeUpdate();
+			System.out.println("LOG: " + "added ID = " + ID);
 		} catch (SQLException ex) {
 			ID = -1;
+			ex.printStackTrace();
 		}
 		return ID;
 	}

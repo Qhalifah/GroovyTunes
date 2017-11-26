@@ -19,13 +19,17 @@ public class RegularPlayer extends Player {
 	public void createPlaylist(String name) throws PlaylistNotCreatedException {
 		if (playlists.size() == Constants.MAX_PLAYLISTS)
 			throw new PlaylistNotCreatedException(Reason.MAX_COUNT_REACHED);
+		System.out.println("LOG: " + "Checkpoint");
 		try {
-			PlaylistOperations.createPlaylist(username, name);
+			int id = PlaylistOperations.createPlaylist(username, name);
+			System.out.println("LOG:" + "id " + id);
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			throw new PlaylistNotCreatedException(Reason.UNKNOWN, e);
 		}
+		System.out.println("LOG: " + "I hve one playlist");
 		Playlist p = new Playlist(playlists.size(), name);
 		this.playlists.add(p);
+		System.out.println("LOG: " + "added");
 	}
 
 	@Override

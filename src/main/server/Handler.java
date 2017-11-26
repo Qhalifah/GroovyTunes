@@ -85,6 +85,7 @@ public class Handler {
 				} catch (PlaylistNotCreatedException ex) {
 					response.put("status", "error");
 					message = "Unknown error";
+					ex.printStackTrace();
 					if (ex.getReason() == Reason.ALREADY_EXISTS) {
 						message = "Playlist with name \'" + name + "\' already exists";
 					} else if (ex.getReason() == Reason.MAX_COUNT_REACHED) {

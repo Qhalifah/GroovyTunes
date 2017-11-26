@@ -69,5 +69,5 @@
     </target>
 
     <!-- default target -->
-    <target name="main" depends="clean, compile, build" />
+    <target name="main" depends="clean, compile, test, build" />
 </project>

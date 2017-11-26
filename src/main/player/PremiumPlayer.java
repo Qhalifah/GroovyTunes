@@ -17,7 +17,7 @@ public class PremiumPlayer extends Player {
 	@Override
 	public void createPlaylist(String name) throws PlaylistNotCreatedException {
 		try {
-			if (PlaylistOperations.createPlaylist(username, name) != 1)
+			if (PlaylistOperations.createPlaylist(username, name) == -1)
 				throw new PlaylistNotCreatedException(Reason.UNKNOWN);
 			Playlist p = new Playlist(playlists.size(), name);
 			playlists.add(p);

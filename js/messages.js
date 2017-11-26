@@ -113,7 +113,12 @@ function remove_song(_id){
 }
 
 function share_playlist(){
-
+    var msg = {
+        'type': 'get-sharable-link',
+        'level':'playlist-level',
+        'name': playlist,
+    };
+    socket.send(JSON.stringify(msg));
 }
 
 function delete_playlist(){
@@ -121,6 +126,15 @@ function delete_playlist(){
         'type': 'remove-playlist',
         'level':'playlist-level',
         'name': playlist,
+    };
+    socket.send(JSON.stringify(msg));
+}
+
+function get_shared_playlist(_id){
+    var msg = {
+        'type': 'add-shared-playlist',
+        'level':'playlist-level',
+        'id': _id,
     };
     socket.send(JSON.stringify(msg));
 }

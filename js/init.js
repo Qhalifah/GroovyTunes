@@ -44,6 +44,11 @@ window.onload = function() {
         case "retLogin":
             if(message.status == 'success'){
                 $('.sign_in').addClass('hidden_element');
+                var url = new URL(window.location.href);
+                var id = url.searchParams.get('id');
+                if(id){
+                    get_shared_playlist(id);
+                }
                 get_playlists();
                 get_all_songs();
             }else{
@@ -92,6 +97,15 @@ window.onload = function() {
         case 'ret-rename-playlist':
             get_playlists();
             $('#playlistTitle').html(message.name);
+            break;
+        case 'ret-get-sharable-link':
+            var id = message.link;
+            var url = window.location.href;
+            var split = url.split('?');
+            var sharable = split[0] + '?id=' + id;
+            alert(sharable);
+            break;
+        case 'ret-add-shared-playlist':
             break;
         case 'ret-play':
             if(message['type-of-playable'] == 'playlist'){
@@ -167,12 +181,4 @@ function dispPlaylists(){
 function dispPlayer(_id, _url){
   html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumartist +'</h3><audio controls><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
-}
-
-function sign_in(){
-
-}
-
-function sign_up(){
-
 }

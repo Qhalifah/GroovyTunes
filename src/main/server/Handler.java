@@ -202,6 +202,7 @@ public class Handler {
 			case "get-sharable-link":
 				name = (String) msgJSON.get("name");
 				response = new JSONObject();
+				response.put("type", "ret-get-sharable-link");
 				String sharableLink = admin.getPlayer().getSharableLink(name);
 				response.put("link", sharableLink);
 				session.getRemote().sendString(response.toJSONString());
@@ -210,6 +211,7 @@ public class Handler {
 			case "add-shared-playlist":
 				String shareID = (String) msgJSON.get("id");
 				response = new JSONObject();
+				response.put("type", "ret-add-shared-playlist");
 				if(admin.getPlayer().addSharedPlaylist(shareID)) {
 					response.put("status", "success");
 				} else {

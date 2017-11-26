@@ -3,6 +3,7 @@ var isopen = false;
 var songs = {};
 var playlists = {};
 var playlist = '';
+var username = '';
 
 window.onload = function() {
     var originalValue;
@@ -44,6 +45,7 @@ window.onload = function() {
         case "retLogin":
             if(message.status == 'success'){
                 $('.sign_in').addClass('hidden_element');
+                $('.userControl').removeClass('hidden_element');
                 var url = new URL(window.location.href);
                 var id = url.searchParams.get('id');
                 if(id){
@@ -51,6 +53,8 @@ window.onload = function() {
                 }
                 get_playlists();
                 get_all_songs();
+                username = message.name;
+                $('#dropdownMenuButton').html(username);
             }else{
                 alert(message.message);
             }

@@ -75,6 +75,7 @@ public class UserRequestHelper {
 			if (result.getResult() == AUTH_RESULT.SUCCESS) {
 				response.put("type", "retLogin");
 				response.put("status", "success");
+				response.put("name", name);
 				session.add(Constants.USER_SESSION_KEY, result.getUser());
 			} else if (result.getResult() == AUTH_RESULT.INCORRECT_PASSWORD) {
 				response.put("type", "retLogin");

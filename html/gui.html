@@ -26,8 +26,8 @@
 
   <body>
     <!-- Header with nav dropdown and logo -->
-	<header>  
-	  <div class="dropdown userControl">
+	<header>
+	  <div class="dropdown userControl hidden_element">
 	    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 		  User <span class="caret"></span>
 		</button>
@@ -39,16 +39,15 @@
 	  </div>
 	  <img src = "../media/images/Groovy_Tunes_logo_Trans.png" alt="Groovy Tunes Logo" class = 'center'/>
 	</header>
-	
+
 	<!-- Sidebar for controlling playlists -->
 	<div id='sideBar'>
 		<h1>Playlists</h1>
 		<ul id = "playlists">
 		</ul>
 		<div id = "newPlaylist" onclick="createPlaylist()">Create new Playlist</div>
-		<div id = "logoutUser" onclick="logout()">Logout</div>
 	</div>
-	
+
 	<!-- Playlist share and delete buttons -->
 	<div id="main">
 		<div id="playlistTitle"></div>
@@ -106,7 +105,7 @@
 		  </div>
 	  </div>
 	</div>
-	
+
 	<!-- Main Player Modal  -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">

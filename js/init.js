@@ -177,6 +177,6 @@ function dispPlaylists(){
 
 
 function dispPlayer(_id, _url){
-  html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumartist +'</h3><audio id="playBar" controls><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
+  html = '<h3>' + songs[_id].title + ' by ' + songs[_id].albumArtist +'</h3><audio id="playBar" controls><source src="\.\./' + _url + '" type="audio/mpeg">Your browser does not support the audio element.</audio>';
   $('#player').html(html);
 }

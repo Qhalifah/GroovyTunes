@@ -36,8 +36,10 @@ public class PremiumPlayerTest {
 			user.getPlayer().createPlaylist("test-playlist");
 		} catch (PlaylistNotCreatedException e) {
 			e.printStackTrace();
+			System.err.println("REASON: " + e.getReason());
 			assertTrue(false);
 		}
+		assertTrue(user.getPlayer().playlists.size() == 1);
 		if(user.getPlayer().renamePlaylist("test-playlist", "new-test-playlist") == false) {
 			assertTrue(false);
 		}

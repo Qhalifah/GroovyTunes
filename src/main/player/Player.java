@@ -80,12 +80,14 @@ public abstract class Player {
 		for (int i = 0; i < playlists.size(); ++i) {
 			Playlist playlist = (Playlist) playlists.get(i);
 			if (playlist.getName().equals(name)) {
-				playlist.setName(newName);
-				renamed = true;
 				try {
+					System.out.println("LOGGER: playlist ID: " + playlist.getID());
 					PlaylistOperations.renamePlaylist(playlist.getID(), newName);
+					playlist.setName(newName);
+					renamed = true;
 				} catch (ClassNotFoundException | SQLException | IOException e) {
 					renamed = false;
+					System.out.println("LOGGER: playlist: Error in SQL");
 					playlist.setName(name);
 					e.printStackTrace();
 				}

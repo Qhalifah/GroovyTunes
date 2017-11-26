@@ -79,10 +79,11 @@ public class PlaylistOperations {
 		String query = "INSERT INTO " + Constants.PLAYLIST_SONGS + "(playlist_ID, song_ID) VALUES "
 				+ "(?,?)";
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
-		statement.setInt(1, songID);
-		statement.setInt(2, id);
+		statement.setInt(1, id);
+		statement.setInt(2, songID);
 		if(statement.executeUpdate() == 1)
 			inserted = true;
+		System.out.println("LOG:" + "add song to " + id + " " + inserted);
 		return inserted;
 	}
 

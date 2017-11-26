@@ -122,7 +122,7 @@ public class Handler {
 				response = new JSONObject();
 				response.put("type", "ret-add-song");
 				response.put("name", name);
-				try {
+				try {	
 					Song song = new Song(ID);
 					if (admin.getPlayer().addSongToPlaylist(name, song)) {
 						response.put("status", "success");

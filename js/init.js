@@ -85,10 +85,8 @@ window.onload = function() {
             get_playlists();
             break;
         case 'ret-remove-song':
+            get_playlist_songs(playlist);
         case 'ret-add-song':
-            if(playlist == message.name){
-                get_playlist_songs(playlist);
-            }
             break;
         case 'ret-remove-playlist':
             get_playlists();

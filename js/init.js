@@ -74,6 +74,7 @@ window.onload = function() {
                 s[_song.songID] = _song;
             });
             showSongs(message.name, s);
+            $('#playlistButtons').removeClass('hidden_element');
             break;
         case 'ret-create-playlist':
             get_playlists();
@@ -83,6 +84,10 @@ window.onload = function() {
             if(playlist == message.name){
                 get_playlist_songs(playlist);
             }
+            break;
+        case 'ret-remove-playlist':
+            get_playlists();
+            showAllSongs();
             break;
         case 'ret-rename-playlist':
             get_playlists();
@@ -128,7 +133,8 @@ function showSongs(_name, _songs, _add){
     $('#playlistTitle').html(_name);
 }
 function showAllSongs() {
-    showSongs('All Songs', songs, true)
+    showSongs('All Songs', songs, true);
+    $('#playlistButtons').addClass('hidden_element');
 }
 
 function clickedAddButton(_id){

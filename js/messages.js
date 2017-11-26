@@ -117,5 +117,10 @@ function share_playlist(){
 }
 
 function delete_playlist(){
-    
+    var msg = {
+        'type': 'remove-playlist',
+        'level':'playlist-level',
+        'name': playlist,
+    };
+    socket.send(JSON.stringify(msg));
 }

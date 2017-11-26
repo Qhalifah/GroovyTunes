@@ -157,6 +157,7 @@ public class Handler {
 			case "remove-playlist": // DELETE
 				name = (String) msgJSON.get("name");
 				response = new JSONObject();
+				response.put("type", "ret-remove-playlist");
 				if (admin.getPlayer().removePlaylist(name)) {
 					response.put("status", "success");
 				} else {

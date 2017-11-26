@@ -5,10 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -16,8 +13,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import user.User;
-import utils.Constants;
+import auth.Authenticate;
+import auth.Authenticate.AUTH_RESULT;
+import auth.Authenticate.AuthResult;
 import utils.dbmgr.PlaylistOperations;
 import utils.dbmgr.UserOperations;
 
@@ -34,58 +32,56 @@ public class PlaylistOperationsTest {
 	@Test
 	public void testA_CreatePlaylist() throws ClassNotFoundException, SQLException, IOException {
 		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
+		System.out.println("Playlist created with id = " + playlistID);
 		assertFalse(playlistID == -1);
+		assertTrue(PlaylistOperations.removePlaylist(playlistID, "test-user"));
 	}
 
 	@Test
 	public void testB_AddSong() throws ClassNotFoundException, SQLException, IOException {
-		if (playlistID == -1)
-			assertTrue(false);
+		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
 		boolean added = PlaylistOperations.addSong(1, playlistID);
+		added = added & PlaylistOperations.removePlaylist(playlistID, "test-user");
 		assertTrue(added);
 	}
 
 	@Test
 	public void testC_PopulatePlaylist() throws ParseException, ClassNotFoundException, SQLException, IOException {
-		if(playlistID == -1)
+		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
+		boolean added = PlaylistOperations.addSong(1, playlistID);
+		AuthResult authUser = Authenticate.authUser("test-user", "test-password");
+		if(authUser.getResult() == AUTH_RESULT.INCORRECT_PASSWORD || authUser.getResult() == AUTH_RESULT.NO_SUCH_USER)
 			assertTrue(false);
-		DateFormat df = new SimpleDateFormat(Constants.DATE_FORMAT);
-		User u = new User("test-user", "test-password", "test-firstname", "test-lastname", df.parse("1993-01-01"), new Date(), false);
-		boolean size = PlaylistOperations.populatePlaylist(u).size() == 1;
-		assertTrue(size);
+		added = added & PlaylistOperations.populatePlaylist(authUser.getUser()).size() == 1;
+		added = added & PlaylistOperations.removePlaylist(playlistID, "test-user");
+		assertTrue(added);
 	}
 	
 	@Test
 	public void testD_RenamePlaylist() throws ClassNotFoundException, SQLException, IOException {
-		if(playlistID == -1)
-			assertTrue(false);
-		int playlist = PlaylistOperations.renamePlaylist(playlistID, "test-new-playlist");
-		assertTrue(playlist == 1);
+		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
+		System.out.println("PlaylistID: " + playlistID);
+		boolean success = PlaylistOperations.renamePlaylist(playlistID, "test-new-playlist") == 1;
+		success = success & PlaylistOperations.removePlaylist(playlistID, "test-user");
+		assertTrue(success);
 	}
 	
 	@Test
 	public void testE_GetAllSongsByID() throws ClassNotFoundException, SQLException, IOException {
-		if(playlistID == -1)
-			assertTrue(false);
-		boolean songs = PlaylistOperations.getAllSongsByID(playlistID).size() == 1;
-		assertTrue(songs);
+		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
+		boolean success = PlaylistOperations.addSong(1, playlistID);
+		success = success & PlaylistOperations.getAllSongsByID(playlistID).size() == 1;
+		success = success & PlaylistOperations.removePlaylist(playlistID, "test-user");
+		assertTrue(success);
 	}
 	
 	@Test
 	public void testF_RemoveSong() throws ClassNotFoundException, SQLException, IOException {
-		if(playlistID == -1)
-			assertTrue(false);
-		boolean song = PlaylistOperations.removeSong(playlistID, 1);
-		assertTrue(song);
-	}
-	
-	@Test
-	public void testG_RemovePlaylist() throws ClassNotFoundException, SQLException, IOException {
-		if(playlistID == -1)
-			assertTrue(false);
-		PlaylistOperations.addSong(1, playlistID);
-		boolean playlist = PlaylistOperations.removePlaylist(playlistID, "test-user");
-		assertTrue(playlist);
+		playlistID = PlaylistOperations.createPlaylist("test-user", "test-playlist");
+		boolean success = PlaylistOperations.addSong(1, playlistID);
+		success = success & PlaylistOperations.removeSong(playlistID, 1);
+		success = success & PlaylistOperations.removePlaylist(playlistID, "test-user");
+		assertTrue(success);
 	}
 	
 	@AfterClass

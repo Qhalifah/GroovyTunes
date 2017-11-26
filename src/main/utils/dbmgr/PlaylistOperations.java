@@ -64,11 +64,8 @@ public class PlaylistOperations {
 		statement.setString(2, user);
 		statement.setString(3, name);
 		try {
-			System.out.println("LOG: " + "adding to DB");
-			ID = statement.executeUpdate();
-			System.out.println("LOG: " + "added ID = " + ID);
+			statement.executeUpdate();
 		} catch (SQLException ex) {
-			ID = -1;
 			ex.printStackTrace();
 		}
 		return ID;
@@ -83,7 +80,6 @@ public class PlaylistOperations {
 		statement.setInt(2, songID);
 		if(statement.executeUpdate() == 1)
 			inserted = true;
-		System.out.println("LOG:" + "add song to " + id + " " + inserted);
 		return inserted;
 	}
 
@@ -92,7 +88,8 @@ public class PlaylistOperations {
 		PreparedStatement statement = GroovyConnection.getConnection().prepareStatement(query);
 		statement.setString(1, newName);
 		statement.setInt(2, ID);
-		return statement.executeUpdate();
+		int playlist = statement.executeUpdate();
+		return playlist;
 	}
 
 	public static boolean removeSong(int playlistID, int songID) throws ClassNotFoundException, SQLException, IOException {

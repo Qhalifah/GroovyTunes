@@ -110,6 +110,14 @@ public class UserRequestHelper {
 			response.put("status", u.getMembershipStatus());
 			session.getRemote().sendString(response.toJSONString());
 			break;
+			
+		case "activate-premium":
+			response = new JSONObject();
+			u = (User) session.get(Constants.USER_SESSION_KEY);
+			response.put("status", "success");
+			u.activatePremium();
+			session.getRemote().sendString(response.toJSONString());
+			break;
 
 		case "update-info":
 			response = new JSONObject();

@@ -89,7 +89,7 @@ public class UserOperations {
 	}
 
 	public static boolean activatePremium(String username) throws ClassNotFoundException, SQLException, IOException {
-		String query = "UDPATE " + Constants.USER_TABLE + " SET status = ? WHERE username = ?";
+		String query = "UPDATE " + Constants.USER_TABLE + " SET status = ? WHERE username = ?";
 		PreparedStatement stmt = GroovyConnection.getConnection().prepareStatement(query);
 		stmt.setBoolean(1, true);
 		stmt.setString(2, username);

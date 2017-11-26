@@ -80,6 +80,14 @@ function logout(){
     socket.send(JSON.stringify(msg));
 }
 
+function activate_premium(){
+    var msg = {
+        type: 'activate-premium',
+        level:'user',
+    }
+    socket.send(JSON.stringify(msg));
+}
+
 function add_song(){
     var value =  $('#options').find(":selected").val();
     var split = value.split(" ")
@@ -136,5 +144,13 @@ function get_shared_playlist(_id){
         'level':'playlist-level',
         'id': _id,
     };
+    socket.send(JSON.stringify(msg));
+}
+
+function get_user_info(){
+    var msg = {
+        'type': 'get-info',
+        'level': 'user'
+    }
     socket.send(JSON.stringify(msg));
 }

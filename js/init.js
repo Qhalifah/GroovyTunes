@@ -53,11 +53,18 @@ window.onload = function() {
                 }
                 get_playlists();
                 get_all_songs();
+                get_user_info();
                 username = message.name;
                 $('#dropdownMenuButton').html(username);
             }else{
                 alert(message.message);
             }
+            break;
+        case "ret-get-info":
+            $('#dropdownMenuButton').html(username + "[" + message.status + "]");
+            break;
+        case "ret-activate-premium":
+            get_user_info();
             break;
         case "retLogout":
               if(message.status == 'success'){

@@ -85,6 +85,7 @@ public class UserOperations {
 					set.getDate("date_joined"),
 					set.getBoolean("status"));
 		}
+		System.out.println(u.getMembershipStatus());
 		return u;
 	}
 

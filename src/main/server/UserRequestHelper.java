@@ -109,13 +109,15 @@ public class UserRequestHelper {
 			response.put("dob", u.getDateOfBirth());
 			response.put("date-joined", u.getDateJoined());
 			response.put("status", u.getMembershipStatus());
+			response.put("type", "ret-get-info");
 			session.getRemote().sendString(response.toJSONString());
 			break;
-			
+
 		case "activate-premium":
 			response = new JSONObject();
 			u = (User) session.get(Constants.USER_SESSION_KEY);
 			response.put("status", "success");
+			response.put("type", "ret-activate-premium");
 			u.activatePremium();
 			session.getRemote().sendString(response.toJSONString());
 			break;

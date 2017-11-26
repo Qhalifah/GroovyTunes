@@ -27,7 +27,7 @@ public class UserAccountDetails {
 
 	/**
 	 * Creates an object of UserAccountDetails and assigns the given parameters
-	 * 
+	 *
 	 * @param username:
 	 *            username
 	 * @param password:
@@ -49,13 +49,13 @@ public class UserAccountDetails {
 		this.lastName = lastName;
 		this.dateOfBirth = dob;
 		this.dateJoined = dateJoined;
-		this.membershipStatus = false;
+		this.membershipStatus = membershipStatus;
 	}
 
 	/**
 	 * Returns details of the user in the form of JSON. Details does not include
 	 * username and password
-	 * 
+	 *
 	 * @return Details of the user in JSON format
 	 */
 	@SuppressWarnings("unchecked")
@@ -72,7 +72,7 @@ public class UserAccountDetails {
 
 	/**
 	 * This method updates the details stored in the database.
-	 * 
+	 *
 	 * @param username:
 	 *            username. Also used as key
 	 * @param firstName:
@@ -93,7 +93,7 @@ public class UserAccountDetails {
 
 	/**
 	 * This method marks the user as PREMIUM user
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
@@ -105,7 +105,7 @@ public class UserAccountDetails {
 
 	/**
 	 * This method checks if the user is a PREMIUM user
-	 * 
+	 *
 	 * @return true if PREMIUM user, false otherwise
 	 */
 	boolean isPremiumMember() {

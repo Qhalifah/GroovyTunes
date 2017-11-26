@@ -141,6 +141,12 @@ public abstract class Player {
 		try {
 			int id = Integer.parseInt(shareID);
 			String name = PlaylistOperations.getPlaylistNameByID(id);
+			for(Playable p: playlists) {
+				Playlist playlist = (Playlist) p;
+				if(playlist.getName().equals(name)) {
+					return false;
+				}
+			}
 			this.createPlaylist(name);
 			Playlist playlist = this.getPlaylist(name);
 			List<Playable> newSongs = null;

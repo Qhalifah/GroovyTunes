@@ -39,17 +39,12 @@ public class PremiumPlayerTest {
 			System.err.println("REASON: " + e.getReason());
 			assertTrue(false);
 		}
-		System.out.println("ck1");
 		if(user.getPlayer().renamePlaylist("test-playlist", "new-playlist") == false) {
 			assertTrue(false);
 		}
-		System.out.println("ck2");
-		user.getPlayer().removePlaylist("test-playlist");
-		System.out.println("ck3");
 		user.getPlayer().removePlaylist("new-playlist");
 		System.out.println("ck4");
 		assertTrue(true);
-		
 	}
 	
 	@AfterClass

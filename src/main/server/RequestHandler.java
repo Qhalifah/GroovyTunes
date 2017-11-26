@@ -24,13 +24,13 @@ import utils.Utility;
 import utils.dbmgr.GroovyConnection;
 
 @WebSocket
-public class Handler {
+public class RequestHandler {
 	private GroovySession session;
 	Utility u = new Utility();
 	JSONParser parser;
 	UserRequestHelper userHelper;
 
-	public Handler() {
+	public RequestHandler() {
 		parser = new JSONParser();
 	}
 

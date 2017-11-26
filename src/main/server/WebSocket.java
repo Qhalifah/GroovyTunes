@@ -35,7 +35,7 @@ public class WebSocket {
 
 		@Override
         public void configure(WebSocketServletFactory factory) {
-            factory.register(Handler.class);
+            factory.register(RequestHandler.class);
         }
     }
 }

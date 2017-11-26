@@ -3,6 +3,7 @@ var isopen = false;
 var songs = {};
 var playlists = {};
 var playlist = '';
+
 window.onload = function() {
     var originalValue;
     $('#playlistTitle').on('dblclick', function(){
@@ -105,14 +106,14 @@ window.onload = function() {
 };
 
 function showSongs(_name, _songs, _add){
-    var fields = ['title', 'albumartist', 'album', 'genre', 'duration'];
+    var fields = ['title', 'albumArtist', 'album', 'genre', 'duration'];
     var html = '<table class="table table-hover"><tr>';
     _.each(fields, function(_field){html += '<th>' + capitalizeFirst(_field) + '</th>'});
     html += '</tr>';
     _.each(_songs, function(_meta, _id) {
         html += '<tr>';
         _.each(fields, function(_field){
-            var toDisp = (_meta[_field] || '');
+            var toDisp = (_field == 'duration') ? (Math.floor(_meta[_field]/60) + ':' + ((_meta[_field]%60 + "").length == 1 ?_meta[_field]%60 + '0' : _meta[_field]%60)) : (_meta[_field] || '');
             html += '<td onclick="get_playable_song(\'' + _id + '\')">' + toDisp + '</td>';
         });
         if(_add){

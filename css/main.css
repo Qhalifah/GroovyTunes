@@ -117,6 +117,10 @@ img.center {
     border-bottom-width: 0px;
 }
 
+#playBar{
+	width: 80%;
+}
+
 #player{
     text-align: center;
     border-color: #333;

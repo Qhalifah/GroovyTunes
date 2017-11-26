@@ -105,3 +105,16 @@ img.center {
 #player{
   text-align: center;
 }
+
+#playlistButtons{
+    position: absolute;
+    top:20px; right:25px;
+}
+
+#sharePlaylistButton{
+
+}
+
+#deletePlaylistButton{
+
+}

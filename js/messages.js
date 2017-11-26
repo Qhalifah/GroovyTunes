@@ -111,3 +111,11 @@ function remove_song(_id){
     }
     socket.send(JSON.stringify(msg));
 }
+
+function share_playlist(){
+
+}
+
+function delete_playlist(){
+    
+}

@@ -7,10 +7,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/signIn.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script><script>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
 $( function() {
   //$( "#inputDOB" ).datepicker();
   $( "#tabs" ).tabs();
@@ -34,6 +33,10 @@ $( function() {
     </div>
     <div id="main">
         <div id="playlistTitle"></div>
+        <div id="playlistButtons" class="hidden_element">
+             <button class="btn btn-info" id="sharePlaylistButton" onclick="share_playlist()">Share Playlist</button>
+             <button class="btn btn-danger" id="deletePlaylistButton" onclick="delete_playlist()">Delete Playlist</button>
+        </div>
         <div id="player"></div>
         <div id="songs"></div>
     </div>
